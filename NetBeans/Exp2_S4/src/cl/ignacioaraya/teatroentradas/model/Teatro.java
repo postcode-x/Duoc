@@ -3,6 +3,11 @@ package cl.ignacioaraya.teatroentradas.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Representa un teatro compuesto por varias zonas, filas y asientos.
+ * Se encarga de inicializar todos los asientos y de mostrarlos
+ * agrupados por zona para su selección.
+ */
 public class Teatro {
     
     public List<Asiento> asientos = new ArrayList<>();
