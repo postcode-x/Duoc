@@ -1,5 +1,8 @@
 package cl.ignacioaraya.teatroentradas.config;
 
+/**
+ * Clase que almacena constantes globales de la aplicación.
+ */
 public final class AppConstants {
     private AppConstants() {}
 
