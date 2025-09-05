@@ -1,12 +1,15 @@
 package cl.ignacioaraya.teatroentradas.model;
 
+/**
+ * Representa un asiento dentro del teatro, con información de ubicación,
+ * disponibilidad, precio base, posibles descuentos y métodos de visualización.
+ */
 public class Asiento {
     String zona;      
     int fila;          
     int columna;
     int numero;
     public boolean disponible;
-    public static final int PRECIO = 20000;
     public int descuento = 0;
 
     // Constructor
