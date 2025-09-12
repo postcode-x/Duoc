@@ -36,11 +36,11 @@ public class Main {
                     configurarPromociones(sc, ventaService);
                     break;
                     
-                case 3: // Busqueda
+                case 3:
                     buscador(sc, ventaService);
                     break;
                     
-                case 4: // Eliminacion
+                case 4:
                     eliminarEntrada(sc, ventaService);
                     break;
                     
