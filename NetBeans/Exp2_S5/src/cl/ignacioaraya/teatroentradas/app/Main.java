@@ -204,20 +204,22 @@ public class Main {
 
                 case 2: // Buscar por ubicacion
                     AppConstants.Ubicacion ubicacion = seleccionarUbicacion(sc);
+                    System.out.println();
                     for (Entrada e : ventaService.getEntradasVendidasPorUbicacion(ubicacion)) {
-                        System.out.println("\n" + e.mostrar());
+                        System.out.println(e.mostrar());
                         hayResultados = true;
                     }
-                    if(!hayResultados) System.out.println("\nSin resultados.");
+                    if(!hayResultados) System.out.println("Sin resultados.");
                     break;
                     
                 case 3: // Buscar por tipo
-                    AppConstants.TipoCliente tipoCliente = seleccionarTipoCliente(sc);
+                    AppConstants.TipoCliente tipoCliente = seleccionarTipoCliente(sc);                    
+                    System.out.println();
                     for (Entrada e : ventaService.getEntradasVendidasPorTipoCliente(tipoCliente)) {
-                        System.out.println("\n" + e.mostrar());
+                        System.out.println(e.mostrar());
                         hayResultados = true;
                     }
-                    if(!hayResultados) System.out.println("\nSin resultados.");
+                    if(!hayResultados) System.out.println("Sin resultados.");
                     break;
                 
                 case 0:
@@ -240,7 +242,7 @@ public class Main {
            
             int numero = InputUtils.leerEntero(sc, "\nIngrese numero de entrada a eliminar: ");
             if(numero > 0){
-                System.out.println((ventaService.eliminarEntradaPorNumero(numero) ? "\nEntrada eliminada correctamente." : "\nEntrada no existe."));
+                System.out.println((ventaService.eliminarEntradaPorNumero(numero) ? "\nEntrada eliminada correctamente." : "\nNo se elimino entrada."));
             }else if (numero == 0){
                 salir = true;
             }
