@@ -38,7 +38,7 @@ public class Entrada {
     
     // Para mostrar asiento individual
     public String mostrar() {
-        return numero + ") " + ubicacion + " - " + tipoCliente + " - $" + precio;
+        return numero + ") " + ubicacion + " - " + tipoCliente.obtenerNombre() + " - $" + precio;
     }
     
     
