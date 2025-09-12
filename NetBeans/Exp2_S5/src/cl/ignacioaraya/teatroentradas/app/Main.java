@@ -41,7 +41,7 @@ public class Main {
                     break;
                     
                 case 4: // Eliminacion
-                    System.out.println(opcionMenuPrincipal);
+                    eliminarEntrada(sc, ventaService);
                     break;
                     
                 case 5: // Salir
@@ -196,7 +196,7 @@ public class Main {
                 case 1:  // Buscar por numero
                     int numero = InputUtils.leerEntero(sc, "\nIngrese un numero: ");
                     if(numero >= 0){
-                        System.out.println(ventaService.getEntradaVendidaPorNumero(numero));
+                        System.out.println("\n" + ventaService.getEntradaVendidaPorNumero(numero));
                     }else{
                         System.out.println("\nNumero no valido.");
                     }
@@ -205,7 +205,7 @@ public class Main {
                 case 2: // Buscar por ubicacion
                     AppConstants.Ubicacion ubicacion = seleccionarUbicacion(sc);
                     for (Entrada e : ventaService.getEntradasVendidasPorUbicacion(ubicacion)) {
-                        System.out.println(e.mostrar());
+                        System.out.println("\n" + e.mostrar());
                         hayResultados = true;
                     }
                     if(!hayResultados) System.out.println("\nSin resultados.");
@@ -214,7 +214,8 @@ public class Main {
                 case 3: // Buscar por tipo
                     AppConstants.TipoCliente tipoCliente = seleccionarTipoCliente(sc);
                     for (Entrada e : ventaService.getEntradasVendidasPorTipoCliente(tipoCliente)) {
-                        System.out.println(e.mostrar());
+                        System.out.println("\n" + e.mostrar());
+                        hayResultados = true;
                     }
                     if(!hayResultados) System.out.println("\nSin resultados.");
                     break;
@@ -229,5 +230,23 @@ public class Main {
            
         } while (!salir);
     }
+    
+    private static void eliminarEntrada(Scanner sc, VentaService ventaService){
+        int opcion = -1;
+        boolean salir = false; 
+        do {
+            System.out.println("\n=== ELIMINAR ENTRADA POR NUMERO ==="); 
+            System.out.println("0) Salir a menu principal");
+           
+            int numero = InputUtils.leerEntero(sc, "\nIngrese numero de entrada a eliminar: ");
+            if(numero > 0){
+                System.out.println((ventaService.eliminarEntradaPorNumero(numero) ? "\nEntrada eliminada correctamente." : "\nEntrada no existe."));
+            }else if (numero == 0){
+                salir = true;
+            }
+           
+        }while(!salir);
+    }
+
 
 }

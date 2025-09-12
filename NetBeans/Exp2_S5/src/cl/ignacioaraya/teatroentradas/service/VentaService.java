@@ -109,4 +109,13 @@ public class VentaService {
         }
         return "\nSin resultados.";
     }
+    
+    public boolean eliminarEntradaPorNumero(int numero) {
+        boolean removed = entradasVendidas.remove(entradasVendidas.get(numero -1));
+        if (removed) {
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
