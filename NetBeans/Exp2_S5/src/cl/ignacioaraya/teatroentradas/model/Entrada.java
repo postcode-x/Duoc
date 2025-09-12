@@ -24,9 +24,22 @@ public class Entrada {
         return precio;
     }
     
+    public int getNumero() {
+        return numero;
+    }
+    
+    public AppConstants.Ubicacion getUbicacion(){
+        return ubicacion;
+    }
+    
+    public AppConstants.TipoCliente getTipoCliente(){
+        return tipoCliente;
+    }
+    
     // Para mostrar asiento individual
     public String mostrar() {
         return numero + ") " + ubicacion + " - " + tipoCliente + " - $" + precio;
     }
+    
     
 }

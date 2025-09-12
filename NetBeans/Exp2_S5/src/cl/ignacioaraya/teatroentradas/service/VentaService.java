@@ -80,4 +80,33 @@ public class VentaService {
     public List<Entrada> getCanasta() { return canasta; }
     public boolean getPromocionA() { return promocionA; }
     public boolean getPromocionB() { return promocionB; }
+    
+    public List<Entrada> getEntradasVendidasPorUbicacion(AppConstants.Ubicacion ubicacion) {
+        List<Entrada> resultado = new ArrayList<>();
+        for (Entrada e : entradasVendidas) {
+            if (e.getUbicacion() == ubicacion) {
+                resultado.add(e);
+            }
+        }
+        return resultado;
+    }
+
+    public List<Entrada> getEntradasVendidasPorTipoCliente(AppConstants.TipoCliente tipoCliente) {
+        List<Entrada> resultado = new ArrayList<>();
+        for (Entrada e : entradasVendidas) {
+            if (e.getTipoCliente() == tipoCliente) {
+                resultado.add(e);
+            }
+        }
+        return resultado;
+    }
+    
+    public String getEntradaVendidaPorNumero(int numero) {
+        for (Entrada e : entradasVendidas) {
+            if (e.getNumero() == numero) {
+                return e.mostrar();
+            }
+        }
+        return "\nSin resultados.";
+    }
 }

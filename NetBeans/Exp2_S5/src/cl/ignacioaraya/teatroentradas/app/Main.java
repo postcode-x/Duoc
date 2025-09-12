@@ -1,6 +1,7 @@
 package cl.ignacioaraya.teatroentradas.app;
 
 import cl.ignacioaraya.teatroentradas.config.AppConstants;
+import cl.ignacioaraya.teatroentradas.model.Entrada;
 import cl.ignacioaraya.teatroentradas.service.VentaService;
 import cl.ignacioaraya.teatroentradas.util.InputUtils;
 import java.util.Scanner;
@@ -36,7 +37,7 @@ public class Main {
                     break;
                     
                 case 3: // Busqueda
-                    System.out.println(opcionMenuPrincipal);
+                    buscador(sc, ventaService);
                     break;
                     
                 case 4: // Eliminacion
@@ -146,7 +147,7 @@ public class Main {
     private static boolean preguntaSeguirComprando(Scanner sc){
         int opcionSeguir;
         do {
-            opcionSeguir = InputUtils.leerEntero(sc, " Seguir comprando? 1 = Si / 0 = No: ");
+            opcionSeguir = InputUtils.leerEntero(sc, "Seguir comprando? 1 = Si / 0 = No: ");
             if (opcionSeguir != 0 && opcionSeguir != 1) {
                 System.out.println("Opcion no valida, intente nuevamente.");
             }
@@ -160,9 +161,9 @@ public class Main {
         do {
             System.out.println("\n=== CONFIGURAR PROMOCIONES ===");
             System.out.println("=== Activa o desactiva promociones vigentes ===");
-            System.out.println("(1) Descuento por compra de dos entradas: " + (ventaService.getPromocionA() ? "ACTIVA" : "INACTIVA"));
-            System.out.println("(2) Descuento por compra de tres entradas o mas entradas: " + (ventaService.getPromocionB() ? "ACTIVA" : "INACTIVA"));
-            System.out.println("(0) Finalizar");
+            System.out.println("1) Descuento por compra de dos entradas: " + (ventaService.getPromocionA() ? "ACTIVA" : "INACTIVA"));
+            System.out.println("2) Descuento por compra de tres o mas entradas: " + (ventaService.getPromocionB() ? "ACTIVA" : "INACTIVA"));
+            System.out.println("0) Salir a menu principal");
             
             int opcion = InputUtils.leerEntero(sc, "\nPara activar o desactivar una promocion, ingresa el numero correspondiente: ");
             if (opcion == 1) {
@@ -176,6 +177,57 @@ public class Main {
             }
             
         } while (!salir);
-    }       
+    }    
+    
+    private static void buscador(Scanner sc, VentaService ventaService){
+        int opcionBuscador = -1;
+        boolean salir = false; 
+        do {
+           System.out.println("\n=== BUSCADOR ==="); 
+           System.out.println("1) Buscar por numero");
+           System.out.println("2) Buscar por ubicacion");
+           System.out.println("3) Buscar por tipo");
+           System.out.println("0) Salir a menu principal");
+           
+           opcionBuscador = InputUtils.leerEntero(sc, "\nElija una opcion: ");
+           boolean hayResultados = false;
+           
+           switch (opcionBuscador) {
+                case 1:  // Buscar por numero
+                    int numero = InputUtils.leerEntero(sc, "\nIngrese un numero: ");
+                    if(numero >= 0){
+                        System.out.println(ventaService.getEntradaVendidaPorNumero(numero));
+                    }else{
+                        System.out.println("\nNumero no valido.");
+                    }
+                    break;
+
+                case 2: // Buscar por ubicacion
+                    AppConstants.Ubicacion ubicacion = seleccionarUbicacion(sc);
+                    for (Entrada e : ventaService.getEntradasVendidasPorUbicacion(ubicacion)) {
+                        System.out.println(e.mostrar());
+                        hayResultados = true;
+                    }
+                    if(!hayResultados) System.out.println("\nSin resultados.");
+                    break;
+                    
+                case 3: // Buscar por tipo
+                    AppConstants.TipoCliente tipoCliente = seleccionarTipoCliente(sc);
+                    for (Entrada e : ventaService.getEntradasVendidasPorTipoCliente(tipoCliente)) {
+                        System.out.println(e.mostrar());
+                    }
+                    if(!hayResultados) System.out.println("\nSin resultados.");
+                    break;
+                
+                case 0:
+                    salir = true;
+                    break;
+
+                default: // Ingresa entero fuera de rango
+                    System.out.println("Opcion no valida.");
+           }
+           
+        } while (!salir);
+    }
 
 }
