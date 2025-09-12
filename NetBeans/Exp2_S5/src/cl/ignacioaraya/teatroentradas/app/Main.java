@@ -19,7 +19,7 @@ public class Main {
          // Loop principal de la aplicación
         do {
 
-            System.out.println("\n=== MENU PRINCIPAL ===" + ventaService.getEntradasVendidas().size());
+            System.out.println("\n=== MENU PRINCIPAL ===");
             for (int i = 0; i < menu.length; i++) {
                 System.out.println((i + 1) + ") " + menu[i]);
             }
@@ -27,11 +27,12 @@ public class Main {
             opcionMenuPrincipal = InputUtils.leerEntero(sc, "\nElija una opcion: ");
             
             switch (opcionMenuPrincipal) {
-                case 1: flujoVentaEntradas(sc, ventaService);
+                case 1: 
+                    flujoVentaEntradas(sc, ventaService);
                     break;
 
-                case 2: // Promociones
-                    System.out.println(opcionMenuPrincipal);
+                case 2:
+                    configurarPromociones(sc, ventaService);
                     break;
                     
                 case 3: // Busqueda
@@ -153,5 +154,28 @@ public class Main {
 
         return opcionSeguir == 1;
     }
+    
+    private static void configurarPromociones(Scanner sc, VentaService ventaService){
+        boolean salir = false; 
+        do {
+            System.out.println("\n=== CONFIGURAR PROMOCIONES ===");
+            System.out.println("=== Activa o desactiva promociones vigentes ===");
+            System.out.println("(1) Descuento por compra de dos entradas: " + (ventaService.getPromocionA() ? "ACTIVA" : "INACTIVA"));
+            System.out.println("(2) Descuento por compra de tres entradas o mas entradas: " + (ventaService.getPromocionB() ? "ACTIVA" : "INACTIVA"));
+            System.out.println("(0) Finalizar");
+            
+            int opcion = InputUtils.leerEntero(sc, "\nPara activar o desactivar una promocion, ingresa el numero correspondiente: ");
+            if (opcion == 1) {
+                ventaService.switchPromocionA();
+            }else if (opcion == 2) {
+                ventaService.switchPromocionB();
+            }  else if (opcion == 0){
+                salir = true; // salimos
+            }else {
+                System.out.println("\nOpcion no valida, intente nuevamente.");
+            }
+            
+        } while (!salir);
+    }       
 
 }

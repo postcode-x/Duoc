@@ -8,6 +8,8 @@ import cl.ignacioaraya.teatroentradas.model.Entrada;
 public class VentaService {
     private final List<Entrada> entradasVendidas = new ArrayList<>();
     private final List<Entrada> canasta = new ArrayList<>();
+    private boolean promocionA = true;
+    private boolean promocionB = true;
 
     public void agregarEntrada(AppConstants.Ubicacion ubicacion, AppConstants.TipoCliente tipoCliente, int precio) {
         canasta.add(new Entrada(canasta.size() + 1, ubicacion, tipoCliente, precio));
@@ -52,8 +54,8 @@ public class VentaService {
     }
     
     private int calcularDescuentoPorCantidad(int cantidad) {
-        if (cantidad == AppConstants.CANTIDAD_MINIMA_PARA_DESCUENTO_2) return AppConstants.DESCUENTO_POR_2_ENTRADAS;
-        if (cantidad >= AppConstants.CANTIDAD_MINIMA_PARA_DESCUENTO_3_O_MAS) return AppConstants.DESCUENTO_POR_3_O_MAS_ENTRADAS;
+        if (cantidad == AppConstants.CANTIDAD_MINIMA_PARA_DESCUENTO_2 && promocionA) return AppConstants.DESCUENTO_POR_2_ENTRADAS;
+        if (cantidad >= AppConstants.CANTIDAD_MINIMA_PARA_DESCUENTO_3_O_MAS && promocionB) return AppConstants.DESCUENTO_POR_3_O_MAS_ENTRADAS;
         return 0;
     }
 
@@ -65,7 +67,17 @@ public class VentaService {
     public void cancelarCompra() {
         canasta.clear();
     }
+    
+    public void switchPromocionA(){
+        promocionA = !promocionA;
+    }
+    
+    public void switchPromocionB(){
+        promocionB = !promocionB;
+    }
 
     public List<Entrada> getEntradasVendidas() { return entradasVendidas; }
     public List<Entrada> getCanasta() { return canasta; }
+    public boolean getPromocionA() { return promocionA; }
+    public boolean getPromocionB() { return promocionB; }
 }
