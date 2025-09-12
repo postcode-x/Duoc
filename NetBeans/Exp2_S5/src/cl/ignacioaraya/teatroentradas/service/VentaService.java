@@ -111,11 +111,20 @@ public class VentaService {
     }
     
     public boolean eliminarEntradaPorNumero(int numero) {
-        boolean removed = entradasVendidas.remove(entradasVendidas.get(numero -1));
-        if (removed) {
-            return true;
-        }else{
-            return false;
+        Entrada encontrada = null;
+
+        for (Entrada e : entradasVendidas) {
+            if (e.getNumero() == numero) {
+                encontrada = e;
+                break;
+            }
+        }
+
+        if (encontrada != null) {
+            entradasVendidas.remove(encontrada);
+            return true; // eliminada con éxito
+        } else {
+            return false; // no se encontró
         }
     }
 }
