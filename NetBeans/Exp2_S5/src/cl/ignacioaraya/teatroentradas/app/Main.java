@@ -13,13 +13,12 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         VentaService ventaService = new VentaService();
         
-        // Menú principal con opciones
+        // Opciones principales del menú
         String[] menu = {"Venta de entradas", "Promociones", "Busqueda de entradas", "Eliminacion de entradas", "Salir"};
         int opcionMenuPrincipal = -1;
         
-         // Loop principal de la aplicación
+        // Loop principal de la aplicación
         do {
-
             System.out.println("\n=== MENU PRINCIPAL ===");
             for (int i = 0; i < menu.length; i++) {
                 System.out.println((i + 1) + ") " + menu[i]);
@@ -27,27 +26,28 @@ public class Main {
             
             opcionMenuPrincipal = InputUtils.leerEntero(sc, "\nElija una opcion: ");
             
+            // Ejecutar opción seleccionada
             switch (opcionMenuPrincipal) {
                 case 1: 
-                    flujoVentaEntradas(sc, ventaService);
+                    flujoVentaEntradas(sc, ventaService); // flujo de compra de entradas
                     break;
 
                 case 2:
-                    configurarPromociones(sc, ventaService);
+                    configurarPromociones(sc, ventaService); // activar/desactivar promociones
                     break;
                     
                 case 3:
-                    buscador(sc, ventaService);
+                    buscador(sc, ventaService); // búsqueda de entradas
                     break;
                     
                 case 4:
-                    eliminarEntrada(sc, ventaService);
+                    eliminarEntrada(sc, ventaService); // eliminar entrada por número
                     break;
                     
                 case 5: // Salir
                     break;
 
-                default: // Ingresa entero fuera de rango
+                default: // Número fuera de rango
                     System.out.println("Opcion no valida.");
             }
             
@@ -55,25 +55,29 @@ public class Main {
         
         System.out.println("\nHasta luego!");
         sc.close();
-    
     }
     
-    // Flujo de venta de entradas
+    // Flujo de venta de entradas (selección, carrito, checkout)
     private static void flujoVentaEntradas(Scanner sc, VentaService ventaService) {
         boolean seguirComprando;
         do {
+            // Elegir ubicación y tipo de cliente
             AppConstants.Ubicacion ubicacion = seleccionarUbicacion(sc);
             AppConstants.TipoCliente tipoCliente = seleccionarTipoCliente(sc);
             int precio = ventaService.calcularPrecioEntrada(ubicacion, tipoCliente);
+            
+            // Agregar entrada al carrito
             ventaService.agregarEntrada(ubicacion, tipoCliente, precio);
             System.out.println("Entrada agregada. Precio: $" + precio);
 
-            seguirComprando = preguntaSeguirComprando(sc);
+            seguirComprando = preguntaSeguirComprando(sc); // preguntar si continuar comprando
         } while (seguirComprando);
 
+        // Calcular total final (incluye descuentos)
         int totalFinal = ventaService.calcularTotalConDescuento();
         
         boolean opcionValida = false; 
+        // Checkout: pagar o cancelar
         do {
             System.out.println("\n=== CHECKOUT ===");
             System.out.println("Entradas seleccionadas: " + ventaService.getCanasta().size());
@@ -83,18 +87,19 @@ public class Main {
             if (opcion == 1) {
                 ventaService.confirmarCompra();
                 System.out.println("\nCompra realizada con exito. Gracias!");
-                opcionValida = true; // salimos
+                opcionValida = true;
             } else if (opcion == 0){
                 ventaService.cancelarCompra();
                 System.out.println("\nOperacion cancelada. No se guardaron entradas.");
-                opcionValida = true; // salimos
-            }else {
+                opcionValida = true;
+            } else {
                 System.out.println("\nOpcion no valida, intente nuevamente.");
             }
             
         } while (!opcionValida);
     }
     
+    // Menú para seleccionar ubicación del asiento
     private static AppConstants.Ubicacion seleccionarUbicacion(Scanner sc) {
         boolean ubicacionSeleccionada = false;
         int opcionUbicacion = -1;
@@ -111,7 +116,7 @@ public class Main {
             if (opcionUbicacion < 1 || opcionUbicacion > AppConstants.Ubicacion.values().length) {
                 System.out.println("Ubicacion no valida.");
                 continue;
-            }else{
+            } else {
                 ubicacionSeleccionada = true;
             }
         }
@@ -119,6 +124,7 @@ public class Main {
         return AppConstants.Ubicacion.values()[opcionUbicacion -1];
     }
     
+    // Menú para seleccionar tipo de cliente
     private static AppConstants.TipoCliente seleccionarTipoCliente(Scanner sc) {
         boolean tipoClienteSeleccionado = false;
         int opcionTipoCliente = -1;
@@ -135,15 +141,15 @@ public class Main {
             if (opcionTipoCliente < 1 || opcionTipoCliente > AppConstants.TipoCliente.values().length) {
                 System.out.println("Tipo de cliente no valido.");
                 continue;
-            }else{
+            } else {
                 tipoClienteSeleccionado = true;
             }
         }
         
-        
         return AppConstants.TipoCliente.values()[opcionTipoCliente -1];
     }
     
+    // Pregunta si el usuario desea seguir comprando
     private static boolean preguntaSeguirComprando(Scanner sc){
         int opcionSeguir;
         do {
@@ -156,6 +162,7 @@ public class Main {
         return opcionSeguir == 1;
     }
     
+    // Menú para activar o desactivar promociones
     private static void configurarPromociones(Scanner sc, VentaService ventaService){
         boolean salir = false; 
         do {
@@ -168,17 +175,18 @@ public class Main {
             int opcion = InputUtils.leerEntero(sc, "\nPara activar o desactivar una promocion, ingresa el numero correspondiente: ");
             if (opcion == 1) {
                 ventaService.switchPromocionA();
-            }else if (opcion == 2) {
+            } else if (opcion == 2) {
                 ventaService.switchPromocionB();
-            }  else if (opcion == 0){
-                salir = true; // salimos
-            }else {
+            } else if (opcion == 0){
+                salir = true;
+            } else {
                 System.out.println("\nOpcion no valida, intente nuevamente.");
             }
             
         } while (!salir);
     }    
     
+    // Menú de búsqueda de entradas (por número, ubicación o tipo)
     private static void buscador(Scanner sc, VentaService ventaService){
         int opcionBuscador = -1;
         boolean salir = false; 
@@ -193,16 +201,16 @@ public class Main {
            boolean hayResultados = false;
            
            switch (opcionBuscador) {
-                case 1:  // Buscar por numero
+                case 1:  // Buscar por número de entrada
                     int numero = InputUtils.leerEntero(sc, "\nIngrese un numero: ");
                     if(numero >= 0){
                         System.out.println("\n" + ventaService.getEntradaVendidaPorNumero(numero));
-                    }else{
+                    } else {
                         System.out.println("\nNumero no valido.");
                     }
                     break;
 
-                case 2: // Buscar por ubicacion
+                case 2: // Buscar por ubicación
                     AppConstants.Ubicacion ubicacion = seleccionarUbicacion(sc);
                     System.out.println();
                     for (Entrada e : ventaService.getEntradasVendidasPorUbicacion(ubicacion)) {
@@ -212,7 +220,7 @@ public class Main {
                     if(!hayResultados) System.out.println("Sin resultados.");
                     break;
                     
-                case 3: // Buscar por tipo
+                case 3: // Buscar por tipo de cliente
                     AppConstants.TipoCliente tipoCliente = seleccionarTipoCliente(sc);                    
                     System.out.println();
                     for (Entrada e : ventaService.getEntradasVendidasPorTipoCliente(tipoCliente)) {
@@ -222,17 +230,18 @@ public class Main {
                     if(!hayResultados) System.out.println("Sin resultados.");
                     break;
                 
-                case 0:
+                case 0: // salir del buscador
                     salir = true;
                     break;
 
-                default: // Ingresa entero fuera de rango
+                default: // Opción fuera de rango
                     System.out.println("Opcion no valida.");
            }
            
         } while (!salir);
     }
     
+    // Eliminar entrada por número
     private static void eliminarEntrada(Scanner sc, VentaService ventaService){
         int opcion = -1;
         boolean salir = false; 
@@ -243,12 +252,10 @@ public class Main {
             int numero = InputUtils.leerEntero(sc, "\nIngrese numero de entrada a eliminar: ");
             if(numero > 0){
                 System.out.println((ventaService.eliminarEntradaPorNumero(numero) ? "\nEntrada eliminada correctamente." : "\nNo se elimino entrada."));
-            }else if (numero == 0){
+            } else if (numero == 0){
                 salir = true;
             }
            
-        }while(!salir);
+        } while(!salir);
     }
-
-
 }
