@@ -133,7 +133,7 @@ public class Main {
             opcionTipoCliente = InputUtils.leerEntero(sc, "\nElija una opcion: ");
             
             if (opcionTipoCliente < 1 || opcionTipoCliente > AppConstants.TipoCliente.values().length) {
-                System.out.println("Ubicacion no valida.");
+                System.out.println("Tipo de cliente no valido.");
                 continue;
             }else{
                 tipoClienteSeleccionado = true;
