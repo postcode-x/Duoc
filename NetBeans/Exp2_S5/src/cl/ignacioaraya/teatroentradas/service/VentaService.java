@@ -6,13 +6,15 @@ import java.util.List;
 import cl.ignacioaraya.teatroentradas.model.Entrada;
 
 public class VentaService {
-    private final List<Entrada> entradasVendidas = new ArrayList<>();
+    private static final List<Entrada> entradasVendidas = new ArrayList<>();
     private final List<Entrada> canasta = new ArrayList<>();
-    private boolean promocionA = true;
-    private boolean promocionB = true;
+    private static boolean promocionA = true;
+    private static boolean promocionB = true;
+    private static int contadorEntradas = 0;
 
     public void agregarEntrada(AppConstants.Ubicacion ubicacion, AppConstants.TipoCliente tipoCliente, int precio) {
-        canasta.add(new Entrada(canasta.size() + 1, ubicacion, tipoCliente, precio));
+        contadorEntradas ++;
+        canasta.add(new Entrada(contadorEntradas, ubicacion, tipoCliente, precio));
     }
 
     public int calcularPrecioEntrada(AppConstants.Ubicacion ubicacion, AppConstants.TipoCliente tipoCliente) {
@@ -33,7 +35,7 @@ public class VentaService {
             descuento = AppConstants.DESCUENTO_ADULTO_MAYOR;
         }
 
-        return Math.round(precioBase - precioBase * descuento / 100);
+        return Math.round(precioBase * (1 -  descuento / 100.0f));
     }
 
     public int calcularTotalConDescuento() {
@@ -76,16 +78,15 @@ public class VentaService {
         promocionB = !promocionB;
     }
 
-    public List<Entrada> getEntradasVendidas() { return entradasVendidas; }
     public List<Entrada> getCanasta() { return canasta; }
     public boolean getPromocionA() { return promocionA; }
     public boolean getPromocionB() { return promocionB; }
     
     public List<Entrada> getEntradasVendidasPorUbicacion(AppConstants.Ubicacion ubicacion) {
         List<Entrada> resultado = new ArrayList<>();
-        for (Entrada e : entradasVendidas) {
-            if (e.getUbicacion() == ubicacion) {
-                resultado.add(e);
+        for (Entrada entrada : entradasVendidas) {
+            if (entrada.getUbicacion() == ubicacion) {
+                resultado.add(entrada);
             }
         }
         return resultado;
@@ -93,18 +94,18 @@ public class VentaService {
 
     public List<Entrada> getEntradasVendidasPorTipoCliente(AppConstants.TipoCliente tipoCliente) {
         List<Entrada> resultado = new ArrayList<>();
-        for (Entrada e : entradasVendidas) {
-            if (e.getTipoCliente() == tipoCliente) {
-                resultado.add(e);
+        for (Entrada entrada : entradasVendidas) {
+            if (entrada.getTipoCliente() == tipoCliente) {
+                resultado.add(entrada);
             }
         }
         return resultado;
     }
     
     public String getEntradaVendidaPorNumero(int numero) {
-        for (Entrada e : entradasVendidas) {
-            if (e.getNumero() == numero) {
-                return e.mostrar();
+        for (Entrada entrada : entradasVendidas) {
+            if (entrada.getNumero() == numero) {
+                return entrada.mostrar();
             }
         }
         return "\nSin resultados.";
@@ -113,9 +114,9 @@ public class VentaService {
     public boolean eliminarEntradaPorNumero(int numero) {
         Entrada encontrada = null;
 
-        for (Entrada e : entradasVendidas) {
-            if (e.getNumero() == numero) {
-                encontrada = e;
+        for (Entrada entrada : entradasVendidas) {
+            if (entrada.getNumero() == numero) {
+                encontrada = entrada;
                 break;
             }
         }
