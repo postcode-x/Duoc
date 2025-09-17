@@ -23,7 +23,7 @@ public class Main {
             opcion = InputUtils.leerEntero(sc, "\nSeleccione una opcion: ");
 
             switch (opcion) {
-                case 1 -> teatro.reservarAsiento();
+                case 1 -> teatro.reservarAsiento(sc);
                 case 2 -> teatro.modificarReserva();
                 case 3 -> teatro.comprarEntrada();
                 case 4 -> teatro.imprimirBoleta();
