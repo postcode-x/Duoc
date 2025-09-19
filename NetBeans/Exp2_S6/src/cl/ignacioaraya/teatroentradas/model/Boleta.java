@@ -4,14 +4,29 @@ import java.util.List;
 
 public class Boleta {
     
-    private int numeroBoleta;
-    private List<Asiento> asientos;
-    private int cantidadEntradas;
-    private double total;
+    private final int numero;
+    private final List<Asiento> asientos;
     
-    public Boleta() {
+    public Boleta(int numero, List<Asiento> asientos) {
+        this.numero = numero;
+        this.asientos = asientos;
     }
     
-    // Getters y setters...
+    public String getTotal(){
+        double total = 0;
+        for (Asiento asiento : asientos) {
+            total += asiento.getPrecio();
+        }
+        return "Precio Total: $" + String.valueOf(Math.round(total));
+    }
+    
+    public int getNumeroBoleta(){
+        return numero;
+    }
+    
+    public List<Asiento> getAsientos() {
+        return asientos;
+    }
+    
     
 }
