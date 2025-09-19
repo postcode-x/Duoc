@@ -5,9 +5,9 @@ import cl.ignacioaraya.teatroentradas.config.AppConfig;
 public class Asiento {
     
     private final int numero;
-    public AppConfig.Zona zona;    
-    public int fila;
-    public int columna;
+    private final AppConfig.Zona zona;    
+    private final int fila;
+    private final int columna;
     private AppConfig.Estado estado;
 
     public Asiento(int numero, AppConfig.Zona zona, int fila, int columna) {
@@ -22,24 +22,44 @@ public class Asiento {
         return numero + ") " + zona.nombre() + fila + "-" + columna + " (" + estado.obtenerNombre() + ")";
     }
     
+    public String mostrarItemAsientoBoleta(){
+        return "Asiento # " + numero + " | Ubicacion: " + zona.nombre() + fila + "-" + columna + " | Precio: $" + String.valueOf(Math.round(zona.precio()));
+    }
+    
     public void setDisponible() {
-        this.estado = AppConfig.Estado.DISPONIBLE;
+        estado = AppConfig.Estado.DISPONIBLE;
     }
     
     public void setReservado() {
-        this.estado = AppConfig.Estado.RESERVADO;
+        estado = AppConfig.Estado.RESERVADO;
     }
     
     public void setVendido() {
-        this.estado = AppConfig.Estado.VENDIDO;
+        estado = AppConfig.Estado.VENDIDO;
     }
     
     public AppConfig.Estado getEstado() {
-        return this.estado;
+        return estado;
     }
     
     public int getNumero() {
-        return this.numero;
+        return numero;
+    }
+    
+    public double getPrecio() {
+        return zona.precio();
+    }
+    
+    public AppConfig.Zona getZona(){
+        return zona;
+    }   
+    
+    public int getFila(){
+        return fila;
+    }
+    
+    public int getColumna(){
+        return columna;
     }
 
 }
