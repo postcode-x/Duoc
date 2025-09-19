@@ -3,15 +3,15 @@ package cl.ignacioaraya.teatroentradas.config;
 public class AppConfig {
     
     public static final String NOMBRE_TEATRO = "Teatro Moro";
-    public static final int CAPACIDAD = 50;
-    public static final int FILAS_POR_ZONA = 2;
-    public static final int ASIENTOS_POR_FILA = 5;
     public static final int TIEMPO_DE_RESERVA_EN_SEGUNDOS = 10; 
     public record Zona(String nombre, double precio) {}
     public static final Zona[] ZONAS = {
         new Zona("A", 20000.0),
         new Zona("B", 15000.0)
     };
+    public static final int FILAS_POR_ZONA = 2;
+    public static final int ASIENTOS_POR_FILA = 5;
+    public static final int CAPACIDAD = FILAS_POR_ZONA * ASIENTOS_POR_FILA * ZONAS.length;
     
     public enum Estado { 
         DISPONIBLE ("Disponible"), 
