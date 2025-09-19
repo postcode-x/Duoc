@@ -10,8 +10,7 @@ public class AppConfig {
     public record Zona(String nombre, double precio) {}
     public static final Zona[] ZONAS = {
         new Zona("A", 20000.0),
-        new Zona("B", 15000.0),
-        new Zona("C", 10000.0)
+        new Zona("B", 15000.0)
     };
     
     public enum Estado { 
