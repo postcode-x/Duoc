@@ -24,9 +24,9 @@ public class Main {
 
             switch (opcion) {
                 case 1 -> teatro.reservarAsiento(sc);
-                case 2 -> teatro.modificarReserva();
-                case 3 -> teatro.comprarEntrada();
-                case 4 -> teatro.imprimirBoleta();
+                case 2 -> teatro.modificarReserva(sc);
+                case 3 -> teatro.comprarEntrada(sc);
+                case 4 -> teatro.imprimirBoleta(sc);
                 case 5 -> System.out.println("\nHasta luego!");
                 default -> System.out.println("Opcion invalida.");
             }
