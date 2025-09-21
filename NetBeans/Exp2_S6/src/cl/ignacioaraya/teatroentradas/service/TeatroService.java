@@ -23,6 +23,9 @@ public class TeatroService {
     // Contadores para asientos y boletas
     private static int contadorAsientos = 0;
     private static int contadorBoletas = 0;
+    private int asientosDisponibles = 0;
+    private int asientosReservados = 0;
+    private int asientosVendidos = 0;
 
     // Scheduler para manejar expiracion de reservas
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -40,6 +43,9 @@ public class TeatroService {
                 }
             }
         }
+        
+        // Todos los asientos empiezan disponibles
+        asientosDisponibles = asientos.size();
     }
 
     // Muestra el layout del teatro con los asientos por zona
@@ -77,6 +83,7 @@ public class TeatroService {
         ScheduledFuture<?> tarea = scheduler.schedule(() -> {
             if (asiento.getEstado() == AppConfig.Estado.RESERVADO) {
                 asiento.setDisponible();
+                System.out.println("\n[INFO] Expiro la reserva del asiento #" + asiento.getNumero());
             }
         }, segundos, TimeUnit.SECONDS);
 
@@ -146,6 +153,7 @@ public class TeatroService {
         for (Asiento asiento : carrito) {
             if (asiento.getEstado() == AppConfig.Estado.RESERVADO) {
                 asiento.setDisponible();
+                cancelarExpiracion(asiento);
             }
         }
         carrito.clear();
@@ -171,7 +179,40 @@ public class TeatroService {
     public List<Boleta> getBoletas() {
         return boletas;
     }
+    
+    public int getAsientosDisponibles() {
+        int contador = 0;
+        for (Asiento asiento : asientos) {
+            if (asiento.getEstado() == AppConfig.Estado.DISPONIBLE) {
+                contador++;
+            }
+        }
+        asientosDisponibles = contador;
+        return asientosDisponibles;
+    }
 
+    public int getAsientosReservados() {
+        int contador = 0;
+        for (Asiento asiento : asientos) {
+            if (asiento.getEstado() == AppConfig.Estado.RESERVADO) {
+                contador++;
+            }
+        }
+        asientosReservados = contador;
+        return asientosReservados;
+    }
+
+    public int getAsientosVendidos() {
+        int contador = 0;
+        for (Asiento asiento : asientos) {
+            if (asiento.getEstado() == AppConfig.Estado.VENDIDO) {
+                contador++;
+            }
+        }
+        asientosVendidos = contador;
+        return asientosVendidos;
+    }
+    
     // Detener scheduler al cerrar aplicacion
     public void shutdown() {
         scheduler.shutdown();

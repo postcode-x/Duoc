@@ -17,7 +17,7 @@ public class Main {
 
         // Menu principal
         do {
-            System.out.println("\n--- Menu de Venta | " + AppConfig.NOMBRE_TEATRO + " ---");
+            System.out.println("\n--- Menu de Venta | " + AppConfig.NOMBRE_TEATRO + " (" + teatro.getAsientosDisponibles() + " asientos disponibles) ---");
             System.out.println("1. Reservar asiento");
             System.out.println("2. Modificar reserva");
             System.out.println("3. Comprar entradas");
