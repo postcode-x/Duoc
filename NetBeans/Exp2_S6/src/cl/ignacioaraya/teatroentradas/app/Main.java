@@ -8,15 +8,16 @@ import cl.ignacioaraya.teatroentradas.util.InputUtils;
 import java.util.Scanner;
 
 public class Main {
-    
+
     public static void main(String[] args) {
-    
+
         Scanner sc = new Scanner(System.in);
         TeatroService teatro = new TeatroService();
         int opcion;
 
+        // Menu principal
         do {
-            System.out.println("\n--- Menu de Venta ---");
+            System.out.println("\n--- Menu de Venta | " + AppConfig.NOMBRE_TEATRO + " ---");
             System.out.println("1. Reservar asiento");
             System.out.println("2. Modificar reserva");
             System.out.println("3. Comprar entradas");
@@ -33,22 +34,23 @@ public class Main {
                 case 5 -> System.out.println("\nHasta luego!");
                 default -> System.out.println("Opcion invalida.");
             }
+
         } while (opcion != 5);
-        
+
+        // Cerrar recursos
         teatro.shutdown();
         sc.close();
-        
     }
-    
-    // Reserva de asiento
+
+    // UI para reservar asiento
     private static void reservarAsientoUI(Scanner sc, TeatroService teatro) {
         boolean seguirReservando;
         do {
             System.out.println("\n=== RESERVAR ASIENTO ===");
             System.out.print(teatro.mostrar());
-            
+
             int opcion = InputUtils.leerEntero(sc, "\nSeleccione # de asiento: ");
-            
+
             if (opcion < 1 || opcion > teatro.getAsientos().size()) {
                 System.out.println("Numero de asiento no valido.");
             } else {
@@ -60,14 +62,14 @@ public class Main {
                     System.out.println("\nEl asiento seleccionado no esta disponible.");
                 }
             }
-            
+
             seguirReservando = preguntaSeguirReservando(sc);
-        }
-        while(seguirReservando);
+
+        } while (seguirReservando);
     }
-    
-     // Pregunta si el usuario desea seguir reservando
-    private static boolean preguntaSeguirReservando(Scanner sc){
+
+    // Pregunta al usuario si desea seguir reservando
+    private static boolean preguntaSeguirReservando(Scanner sc) {
         int opcionSeguir;
         do {
             opcionSeguir = InputUtils.leerEntero(sc, "Seguir reservando? 1 = Si / 0 = No: ");
@@ -78,8 +80,8 @@ public class Main {
 
         return opcionSeguir == 1;
     }
-    
-    // Modificación de reserva 
+
+    // UI para modificar reserva
     private static void modificarReservaUI(Scanner sc, TeatroService teatro) {
         if (!teatro.hayAsientosReservados()) {
             System.out.println("\nNo existen asientos reservados actualmente.");
@@ -94,9 +96,8 @@ public class Main {
 
             int opcion = InputUtils.leerEntero(sc, "\nSeleccione # de asiento reservado a modificar (0 para volver): ");
 
-            if (opcion == 0) {
-                break; // salir del menú
-            }
+            if (opcion == 0) break;
+
             if (opcion < 1 || opcion > teatro.getAsientos().size()) {
                 System.out.println("Numero de asiento no valido.");
                 continue;
@@ -118,19 +119,22 @@ public class Main {
 
             switch (accion) {
                 case 1 -> {
+                    // Cancelar reserva
                     asiento.setDisponible();
-                    System.out.println("\nReserva cancelada. El asiento #" + asiento.getNumero() + " ahora esta disponible.");
+                    System.out.println("\nReserva cancelada. Asiento #" + asiento.getNumero() + " disponible.");
                     modificacionFinalizada = true;
                 }
                 case 2 -> {
+                    // Cambiar asiento
                     asiento.setDisponible();
                     System.out.println("\nSeleccione el nuevo asiento a reservar:");
-                     System.out.print(teatro.mostrar());
+                    System.out.print(teatro.mostrar());
 
                     int nuevo = InputUtils.leerEntero(sc, "\nSeleccione # de asiento: ");
+
                     if (nuevo < 1 || nuevo > teatro.getAsientos().size()) {
                         System.out.println("Numero de asiento no valido.");
-                        teatro.reservarAsientoConExpiracion(asiento); // restaurar reserva original
+                        teatro.reservarAsientoConExpiracion(asiento); // restaurar original
                         continue;
                     }
 
@@ -141,7 +145,7 @@ public class Main {
                         modificacionFinalizada = true;
                     } else {
                         System.out.println("\nEl asiento seleccionado no esta disponible.");
-                        teatro.reservarAsientoConExpiracion(asiento); // restaurar reserva original
+                        teatro.reservarAsientoConExpiracion(asiento); // restaurar original
                     }
                 }
                 case 3 -> {
@@ -153,21 +157,22 @@ public class Main {
 
         } while (!modificacionFinalizada);
     }
-    
-    // Compra de entrada
-    private static void comprarEntradaUI(Scanner sc, TeatroService teatro){
+
+    // UI para comprar entradas
+    private static void comprarEntradaUI(Scanner sc, TeatroService teatro) {
         if (!teatro.hayAsientosReservados()) {
-            System.out.println("\nNo existen asientos reservados para compra actualmente.");
+            System.out.println("\nNo existen asientos reservados para compra.");
             return;
         }
-        boolean opcionValida = false; 
+
         teatro.getCarrito().clear();
-        
         for (Asiento asiento : teatro.getAsientos()) {
             if (asiento.getEstado() == AppConfig.Estado.RESERVADO) {
                 teatro.getCarrito().add(asiento);
             }
         }
+
+        boolean opcionValida = false;
 
         do {
             System.out.println("\n=== COMPRAR ENTRADA(S) ===");
@@ -176,7 +181,7 @@ public class Main {
             System.out.println("Total a pagar: $" + teatro.calcularTotalCarrito());
 
             int opcion = InputUtils.leerEntero(sc, "1 = Pagar / 0 = Cancelar: ");
-            
+
             switch (opcion) {
                 case 1 -> {
                     int numBoleta = teatro.marcarComoVendidos();
@@ -190,21 +195,20 @@ public class Main {
                 }
                 default -> System.out.println("Opcion no valida.");
             }
-            
+
         } while (!opcionValida);
-    
     }
-    
-    // Impresión de boleta
+
+    // UI para imprimir boleta
     private static void imprimirBoletaUI(Scanner sc, TeatroService teatro) {
         if (teatro.getBoletas().isEmpty()) {
             System.out.println("\nNo existen boletas emitidas actualmente.");
             return;
         }
-        
+
         int numero = InputUtils.leerEntero(sc, "Ingrese numero de boleta a mostrar: ");
         Boleta boleta = teatro.buscarBoletaPorNumero(numero);
-                
+
         if (boleta == null) {
             System.out.println("\nBoleta no encontrada.");
         } else {
@@ -216,5 +220,5 @@ public class Main {
             System.out.println("\n=== FIN BOLETA ===");
         }
     }
-    
+
 }
