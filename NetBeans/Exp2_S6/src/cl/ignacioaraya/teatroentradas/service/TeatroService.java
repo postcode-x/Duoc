@@ -32,20 +32,25 @@ public class TeatroService {
     }
 
     public String mostrar() {
-        String layoutTeatro = "";
+        StringBuilder layoutTeatro = new StringBuilder();
+
         for (AppConfig.Zona zona : AppConfig.ZONAS) {
-            layoutTeatro += ("Zona " + zona.nombre() + " | $" + Math.round(zona.precio())) + "\n";
+            layoutTeatro.append("Zona ").append(zona.nombre())
+                         .append(" | $").append(Math.round(zona.precio()))
+                         .append("\n");
+
             for (Asiento asiento : asientos) {
                 if (asiento.getZona().equals(zona)) {
-                    layoutTeatro += (asiento.mostrar() + "   ");
+                    layoutTeatro.append(asiento.mostrar()).append("   ");
                     if (asiento.getColumna() == AppConfig.ASIENTOS_POR_FILA) {
-                        layoutTeatro += "\n";
+                        layoutTeatro.append("\n");
                     }
                 }
             }
-            layoutTeatro += "\n";
+            layoutTeatro.append("\n");
         }
-        return layoutTeatro;
+
+        return layoutTeatro.toString();
     }
 
     private void programarExpiracion(Asiento asiento, long segundos) {
@@ -80,12 +85,15 @@ public class TeatroService {
     }
     
     public String mostrarAsientosCarrito(){
-        String listaAsientos = "";
+        if (carrito.isEmpty()) return "";
+        
+        StringBuilder sb = new StringBuilder();
         for (Asiento asiento : carrito) {
-            listaAsientos += asiento.mostrar() + " | ";
+            sb.append(asiento.mostrar()).append(" | ");
         }
-        if (listaAsientos.isEmpty()) return "";
-        return listaAsientos.substring(0, listaAsientos.length() - 2);
+        sb.setLength(sb.length() - 3);
+
+        return sb.toString();
     }
     
     public double calcularTotalCarrito(){
