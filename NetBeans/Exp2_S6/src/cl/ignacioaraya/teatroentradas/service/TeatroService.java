@@ -103,7 +103,7 @@ public class TeatroService {
         }
     }
     
-    public void marcarComoVendidos(){
+    public int marcarComoVendidos(){
         for (Asiento asiento : carrito) {
             asiento.setVendido();
             cancelarExpiracion(asiento);
@@ -111,6 +111,7 @@ public class TeatroService {
         contadorBoletas ++;
         boletas.add(new Boleta(contadorBoletas, new ArrayList<>(carrito)));
         carrito.clear();
+        return contadorBoletas;
     }
     
     public void marcarComoDisponibles(){

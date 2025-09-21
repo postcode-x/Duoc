@@ -179,8 +179,8 @@ public class Main {
             
             switch (opcion) {
                 case 1 -> {
-                    teatro.marcarComoVendidos();
-                    System.out.println("\nCompra realizada con exito. Gracias!");
+                    int numBoleta = teatro.marcarComoVendidos();
+                    System.out.println("\nCompra realizada con exito (Boleta # " + numBoleta + "). Gracias!");
                     opcionValida = true;
                 }
                 case 0 -> {
