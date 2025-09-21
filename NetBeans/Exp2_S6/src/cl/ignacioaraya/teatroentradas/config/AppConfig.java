@@ -3,7 +3,7 @@ package cl.ignacioaraya.teatroentradas.config;
 public class AppConfig {
     
     public static final String NOMBRE_TEATRO = "Teatro Moro";
-    public static final int TIEMPO_DE_RESERVA_EN_SEGUNDOS = 10; 
+    public static final int TIEMPO_DE_RESERVA_EN_SEGUNDOS = 120; 
     public record Zona(String nombre, double precio) {}
     public static final Zona[] ZONAS = {
         new Zona("A", 20000.0),
