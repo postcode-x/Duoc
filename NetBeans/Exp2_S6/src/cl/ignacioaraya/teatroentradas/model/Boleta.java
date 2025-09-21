@@ -12,12 +12,12 @@ public class Boleta {
         this.asientos = asientos;
     }
     
-    public String getTotal(){
+    public double getTotal(){
         double total = 0;
         for (Asiento asiento : asientos) {
             total += asiento.getPrecio();
         }
-        return "Precio Total: $" + String.valueOf(Math.round(total));
+        return total;
     }
     
     public int getNumeroBoleta(){
