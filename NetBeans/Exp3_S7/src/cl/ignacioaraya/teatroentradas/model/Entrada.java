@@ -49,4 +49,21 @@ public class Entrada {
     public String mostrar() {
         return ubicacion + " - " + tipoCliente.obtenerNombre() + " - $" + precio;
     }
+    
+    // Devuelve un String con dato de entrada a mostrar en resumen de ventas
+    public String mostrarResumen() {
+        return "Ubicacion: " + ubicacion + 
+                " - Costo final: $" + precio + 
+                " - Descuento aplicado: " + getDescuento() + "%" + " (" + getTipoCliente().obtenerNombre() + ")";
+    }
+    
+    // Devuelve el descuento aplicado
+    private int getDescuento() {
+        return  getTipoCliente() == AppConfig.TipoCliente.ADULTO_MAYOR 
+                    ? AppConfig.DESCUENTO_ADULTO_MAYOR 
+                    : getTipoCliente() == AppConfig.TipoCliente.ESTUDIANTE 
+                        ? AppConfig.DESCUENTO_ESTUDIANTE 
+                        : 0;
+    }
+    
 }

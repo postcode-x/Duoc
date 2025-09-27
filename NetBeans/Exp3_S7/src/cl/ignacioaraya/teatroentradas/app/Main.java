@@ -1,6 +1,7 @@
 package cl.ignacioaraya.teatroentradas.app;
 
 import cl.ignacioaraya.teatroentradas.config.AppConfig;
+import cl.ignacioaraya.teatroentradas.model.Entrada;
 import cl.ignacioaraya.teatroentradas.service.VentaService;
 import cl.ignacioaraya.teatroentradas.util.InputUtils;
 import java.util.Scanner;
@@ -143,6 +144,11 @@ public class Main {
         if (ventaService.getEntradasVendidas().isEmpty()) {
             System.out.println("\nNo existen entradas vendidas.");
             return;
+        }
+        
+        System.out.println("\n=== RESUMEN DE VENTAS ===");
+        for (Entrada entrada : ventaService.getEntradasVendidas()) {
+            System.out.println(entrada.mostrarResumen());
         }
     
     }
