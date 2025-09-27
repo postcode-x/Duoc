@@ -12,6 +12,8 @@ public class VentaService {
     private final List<Entrada> canasta = new ArrayList<>();
     // Contador incremental para asignar número único a cada entrada
     private static int contadorEntradas = 0;
+    // Ingresos totales
+    private static int ingresosTotales = 0;
 
     // Agregar nueva entrada a la canasta
     public void agregarEntrada(AppConfig.Ubicacion ubicacion, AppConfig.TipoCliente tipoCliente, int precio) {
@@ -49,9 +51,10 @@ public class VentaService {
         return total;
     }
 
-    // Confirma la compra: mueve entradas de canasta a vendidas
+    // Confirma la compra: mueve entradas de canasta a vendidas y actualiza ingresos totales
     public void confirmarCompra() {
         entradasVendidas.addAll(canasta);
+        ingresosTotales += canasta.get(0).getPrecio();
         canasta.clear();
     }
 
@@ -62,60 +65,15 @@ public class VentaService {
 
     // Getters
     public List<Entrada> getCanasta() { return canasta; }
+    
     public List<Entrada> getEntradasVendidas() { return entradasVendidas; }
     
     public int getAsientosDisponibles(){
         return AppConfig.CAPACIDAD - entradasVendidas.size();
     }
     
-    // Busca todas las entradas vendidas por ubicación
-    public List<Entrada> getEntradasVendidasPorUbicacion(AppConfig.Ubicacion ubicacion) {
-        List<Entrada> resultado = new ArrayList<>();
-        for (Entrada entrada : entradasVendidas) {
-            if (entrada.getUbicacion() == ubicacion) {
-                resultado.add(entrada);
-            }
-        }
-        return resultado;
-    }
-
-    // Busca todas las entradas vendidas por tipo de cliente
-    public List<Entrada> getEntradasVendidasPorTipoCliente(AppConfig.TipoCliente tipoCliente) {
-        List<Entrada> resultado = new ArrayList<>();
-        for (Entrada entrada : entradasVendidas) {
-            if (entrada.getTipoCliente() == tipoCliente) {
-                resultado.add(entrada);
-            }
-        }
-        return resultado;
+    public int getIngresosTotales(){
+        return ingresosTotales; 
     }
     
-    // Busca una entrada vendida por número único
-    public String getEntradaVendidaPorNumero(int numero) {
-        for (Entrada entrada : entradasVendidas) {
-            if (entrada.getNumero() == numero) {
-                return entrada.mostrar();
-            }
-        }
-        return "\nSin resultados.";
-    }
-    
-    // Elimina una entrada vendida por número
-    public boolean eliminarEntradaPorNumero(int numero) {
-        Entrada encontrada = null;
-
-        for (Entrada entrada : entradasVendidas) {
-            if (entrada.getNumero() == numero) {
-                encontrada = entrada;
-                break;
-            }
-        }
-
-        if (encontrada != null) {
-            entradasVendidas.remove(encontrada);
-            return true; // eliminada con éxito
-        } else {
-            return false; // no se encontró
-        }
-    }
 }

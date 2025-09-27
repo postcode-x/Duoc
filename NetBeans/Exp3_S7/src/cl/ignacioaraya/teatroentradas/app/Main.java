@@ -161,6 +161,7 @@ public class Main {
             System.out.println("\nNo existen entradas vendidas.");
             return;
         }
+        System.out.println("\nLos ingresos totales son de: $" + ventaService.getIngresosTotales());
     }
     
 }
