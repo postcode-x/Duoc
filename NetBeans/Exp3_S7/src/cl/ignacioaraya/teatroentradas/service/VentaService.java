@@ -17,8 +17,7 @@ public class VentaService {
 
     // Agregar nueva entrada a la canasta
     public void agregarEntrada(AppConfig.Ubicacion ubicacion, AppConfig.TipoCliente tipoCliente, int precio) {
-        contadorEntradas ++;
-        canasta.add(new Entrada(contadorEntradas, ubicacion, tipoCliente, precio));
+        canasta.add(new Entrada(0, ubicacion, tipoCliente, precio));
     }
 
     // Calcula el precio de una entrada según ubicación y tipo de cliente (con descuento individual)
@@ -42,7 +41,7 @@ public class VentaService {
     }
 
     // Calcula el total de la canasta
-    public int calcularTotal() {
+    public int calcularTotalCanasta() {
         int total = 0;
         for (Entrada entrada : canasta) {
             total += entrada.getPrecio();
@@ -53,14 +52,17 @@ public class VentaService {
 
     // Confirma la compra: mueve entradas de canasta a vendidas y actualiza ingresos totales
     public void confirmarCompra() {
-        entradasVendidas.addAll(canasta);
-        ingresosTotales += canasta.get(0).getPrecio();
+        for (Entrada entrada : canasta) {
+            contadorEntradas++;
+            entrada.setNumero(contadorEntradas);
+            entradasVendidas.add(entrada);
+            ingresosTotales += entrada.getPrecio();
+        }
         canasta.clear();
     }
 
     // Cancela la compra: vacía la canasta sin guardar
     public void cancelarCompra() {
-        contadorEntradas--;
         canasta.clear();
     }
     

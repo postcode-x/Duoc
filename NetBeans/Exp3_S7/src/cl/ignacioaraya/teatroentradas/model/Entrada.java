@@ -9,7 +9,7 @@ import cl.ignacioaraya.teatroentradas.config.AppConfig;
  */
 public class Entrada {
     // Número único de la entrada
-    private final int numero;
+    private int numero;
     // Ubicación dentro del teatro (VIP, Platea, General, etc.)
     private final AppConfig.Ubicacion ubicacion;
     // Tipo de cliente (Estudiante, Adulto Mayor, Normal, etc.)
@@ -23,6 +23,11 @@ public class Entrada {
         this.ubicacion = ubicacion;
         this.tipoCliente = tipoCliente;
         this.precio = precio;
+    }
+    
+    // Setter del número
+    public void setNumero(int numero) {
+        this.numero = numero;
     }
     
     // Getter del precio
@@ -65,5 +70,13 @@ public class Entrada {
                         ? AppConfig.DESCUENTO_ESTUDIANTE 
                         : 0;
     }
+    
+    public int obtenerPrecioBase(){
+        return ubicacion == AppConfig.Ubicacion.GENERAL 
+                ? AppConfig.PRECIO_BASE_GENERAL 
+                : ubicacion == AppConfig.Ubicacion.PLATEA 
+                    ? AppConfig.PRECIO_BASE_PLATEA 
+                    : AppConfig.PRECIO_BASE_VIP;
+    } 
     
 }

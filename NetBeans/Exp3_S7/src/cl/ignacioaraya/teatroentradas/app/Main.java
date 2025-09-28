@@ -57,7 +57,7 @@ public class Main {
         ventaService.agregarEntrada(ubicacion, tipoCliente, precio);
         
         // Calcular total final
-        int totalFinal = ventaService.calcularTotal();
+        int totalFinal = ventaService.calcularTotalCanasta();
         
         System.out.println("Entrada agregada. Precio: $" + totalFinal);
         
@@ -169,8 +169,8 @@ public class Main {
             System.out.println("\n------------------------------------");
             System.out.println("           " + AppConfig.NOMBRE_TEATRO);
             System.out.println("------------------------------------");
-            System.out.println("Ubicacion: " + entrada.getUbicacion());
-            System.out.println("Costo base: $" + obtenerPrecioBase(entrada) );
+            System.out.println("Ubicacion: " + entrada.getUbicacion().obtenerNombre());
+            System.out.println("Costo base: $" + entrada.obtenerPrecioBase());
             System.out.println("Descuento aplicado: " + entrada.getDescuento() + "%");
             System.out.println("Costo final: $" + entrada.getPrecio());
             System.out.println("------------------------------------");
@@ -188,12 +188,6 @@ public class Main {
         System.out.println("\nLos ingresos totales son de: $" + ventaService.getIngresosTotales());
     }
     
-    private static int obtenerPrecioBase(Entrada entrada){
-        return entrada.getUbicacion() == AppConfig.Ubicacion.GENERAL 
-                ? AppConfig.PRECIO_BASE_GENERAL 
-                : entrada.getUbicacion() == AppConfig.Ubicacion.PLATEA 
-                    ? AppConfig.PRECIO_BASE_PLATEA 
-                    : AppConfig.PRECIO_BASE_VIP;
-    } 
+    
     
 }
