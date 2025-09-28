@@ -52,13 +52,13 @@ public class Entrada {
     
     // Devuelve un String con dato de entrada a mostrar en resumen de ventas
     public String mostrarResumen() {
-        return "Ubicacion: " + ubicacion + 
+        return "Boleta #" + numero + " - Ubicacion: " + ubicacion + 
                 " - Costo final: $" + precio + 
                 " - Descuento aplicado: " + getDescuento() + "%" + " (" + getTipoCliente().obtenerNombre() + ")";
     }
     
     // Devuelve el descuento aplicado
-    private int getDescuento() {
+    public int getDescuento() {
         return  getTipoCliente() == AppConfig.TipoCliente.ADULTO_MAYOR 
                     ? AppConfig.DESCUENTO_ADULTO_MAYOR 
                     : getTipoCliente() == AppConfig.TipoCliente.ESTUDIANTE 

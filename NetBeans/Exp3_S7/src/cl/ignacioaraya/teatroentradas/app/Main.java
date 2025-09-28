@@ -77,7 +77,7 @@ public class Main {
                     System.out.println("\nCompra realizada con exito. Gracias!");
                     opcionValida = true;
                 }
-                case 2 -> {
+                case 0 -> {
                     ventaService.cancelarCompra();
                     System.out.println("\nOperacion cancelada. No se guardaron entradas.");
                     opcionValida = true;
@@ -159,6 +159,24 @@ public class Main {
             System.out.println("\nNo existen entradas vendidas.");
             return;
         }
+
+        int numero = InputUtils.leerEntero(sc, "Ingrese numero de entrada para generar boleta: ");
+        Entrada entrada = ventaService.buscarEntradaPorNumero(numero);
+
+        if (entrada == null) {
+            System.out.println("\nEntrada no encontrada. No se genero boleta.");
+        } else {
+            System.out.println("------------------------------------");
+            System.out.println("           " + AppConfig.NOMBRE_TEATRO);
+            System.out.println("------------------------------------");
+            System.out.println("Ubicacion: " + entrada.getUbicacion());
+            System.out.println("Costo base: $" + obtenerPrecioBase(entrada) );
+            System.out.println("Descuento aplicado: " + entrada.getDescuento() + "%");
+            System.out.println("Costo final: $" + entrada.getPrecio());
+            System.out.println("------------------------------------");
+            System.out.println("Gracias por su visita al " + AppConfig.NOMBRE_TEATRO);
+            System.out.println("------------------------------------");
+        }
     }
     
      // UI para calcular ingresos
@@ -169,5 +187,13 @@ public class Main {
         }
         System.out.println("\nLos ingresos totales son de: $" + ventaService.getIngresosTotales());
     }
+    
+    private static int obtenerPrecioBase(Entrada entrada){
+        return entrada.getUbicacion() == AppConfig.Ubicacion.GENERAL 
+                ? AppConfig.PRECIO_BASE_GENERAL 
+                : entrada.getUbicacion() == AppConfig.Ubicacion.PLATEA 
+                    ? AppConfig.PRECIO_BASE_PLATEA 
+                    : AppConfig.PRECIO_BASE_VIP;
+    } 
     
 }

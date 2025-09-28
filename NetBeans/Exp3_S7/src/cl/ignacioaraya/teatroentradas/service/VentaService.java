@@ -62,6 +62,14 @@ public class VentaService {
     public void cancelarCompra() {
         canasta.clear();
     }
+    
+    // Busca una entrada por numero
+    public Entrada buscarEntradaPorNumero(int numero) {
+        for (Entrada entrada : entradasVendidas) {
+            if (entrada.getNumero() == numero) return entrada;
+        }
+        return null;
+    }
 
     // Getters
     public List<Entrada> getCanasta() { return canasta; }
@@ -75,5 +83,6 @@ public class VentaService {
     public int getIngresosTotales(){
         return ingresosTotales; 
     }
+    
     
 }
