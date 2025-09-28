@@ -54,7 +54,7 @@ public class Entrada {
     public String mostrarResumen() {
         return "Boleta #" + numero + " - Ubicacion: " + ubicacion + 
                 " - Costo final: $" + precio + 
-                " - Descuento aplicado: " + getDescuento() + "%" + " (" + getTipoCliente().obtenerNombre() + ")";
+                " - Descuento aplicado: " + getDescuento() + "%" + " (" + tipoCliente.obtenerNombre() + ")";
     }
     
     // Devuelve el descuento aplicado
