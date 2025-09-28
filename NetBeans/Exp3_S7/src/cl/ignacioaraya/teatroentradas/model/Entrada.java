@@ -40,9 +40,9 @@ public class Entrada {
     
     // Devuelve el descuento aplicado
     public int getDescuento() {
-        return  getTipoCliente() == AppConfig.TipoCliente.ADULTO_MAYOR 
+        return  tipoCliente == AppConfig.TipoCliente.ADULTO_MAYOR 
                     ? AppConfig.DESCUENTO_ADULTO_MAYOR 
-                    : getTipoCliente() == AppConfig.TipoCliente.ESTUDIANTE 
+                    : tipoCliente == AppConfig.TipoCliente.ESTUDIANTE 
                         ? AppConfig.DESCUENTO_ESTUDIANTE 
                         : 0;
     }
