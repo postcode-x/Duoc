@@ -166,7 +166,7 @@ public class Main {
         if (entrada == null) {
             System.out.println("\nEntrada no encontrada. No se genero boleta.");
         } else {
-            System.out.println("------------------------------------");
+            System.out.println("\n------------------------------------");
             System.out.println("           " + AppConfig.NOMBRE_TEATRO);
             System.out.println("------------------------------------");
             System.out.println("Ubicacion: " + entrada.getUbicacion());
@@ -175,7 +175,7 @@ public class Main {
             System.out.println("Costo final: $" + entrada.getPrecio());
             System.out.println("------------------------------------");
             System.out.println("Gracias por su visita al " + AppConfig.NOMBRE_TEATRO);
-            System.out.println("------------------------------------");
+            System.out.println("------------------------------------\n");
         }
     }
     
