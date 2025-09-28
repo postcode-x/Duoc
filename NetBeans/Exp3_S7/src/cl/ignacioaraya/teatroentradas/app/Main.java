@@ -30,7 +30,7 @@ public class Main {
                 case 2 -> resumirVentasUI(sc, ventaService);
                 case 3 -> generarBoletaUI(sc, ventaService);
                 case 4 -> calcularIngresosUI(sc, ventaService);
-                case 5 -> System.out.println("\nHasta luego!");
+                case 5 -> System.out.println("\nGracias por su compra.");
                 default -> System.out.println("Opcion invalida.");
             }
 
