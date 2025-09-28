@@ -1,19 +1,20 @@
 package cl.ignacioaraya.teatroentradas.model;
 
-
 import cl.ignacioaraya.teatroentradas.config.AppConfig;
 
 
-/**
- * Representa una entrada (ticket) dentro del teatro
- */
+// Representa una entrada (ticket) dentro del teatro
 public class Entrada {
+    
     // Número único de la entrada
     private int numero;
+    
     // Ubicación dentro del teatro (VIP, Platea, General, etc.)
     private final AppConfig.Ubicacion ubicacion;
+    
     // Tipo de cliente (Estudiante, Adulto Mayor, Normal, etc.)
     private final AppConfig.TipoCliente tipoCliente;
+    
     // Precio final de la entrada
     private final int precio;
 
@@ -23,31 +24,6 @@ public class Entrada {
         this.ubicacion = ubicacion;
         this.tipoCliente = tipoCliente;
         this.precio = precio;
-    }
-    
-    // Setter del número
-    public void setNumero(int numero) {
-        this.numero = numero;
-    }
-    
-    // Getter del precio
-    public int getPrecio() {
-        return precio;
-    }
-    
-    // Getter del número único
-    public int getNumero() {
-        return numero;
-    }
-    
-    // Getter de la ubicación
-    public AppConfig.Ubicacion getUbicacion(){
-        return ubicacion;
-    }
-    
-    // Getter del tipo de cliente
-    public AppConfig.TipoCliente getTipoCliente(){
-        return tipoCliente;
     }
     
     // Devuelve un String con los datos de la entrada para mostrar por consola
@@ -71,6 +47,7 @@ public class Entrada {
                         : 0;
     }
     
+    // Devuelve el precio base de la entrada
     public int obtenerPrecioBase(){
         return ubicacion == AppConfig.Ubicacion.GENERAL 
                 ? AppConfig.PRECIO_BASE_GENERAL 
@@ -78,5 +55,26 @@ public class Entrada {
                     ? AppConfig.PRECIO_BASE_PLATEA 
                     : AppConfig.PRECIO_BASE_VIP;
     } 
+    
+    // Getters y Setters
+    public void setNumero(int numero) {
+        this.numero = numero;
+    }
+    
+    public int getPrecio() {
+        return precio;
+    }
+    
+    public int getNumero() {
+        return numero;
+    }
+
+    public AppConfig.Ubicacion getUbicacion(){
+        return ubicacion;
+    }
+    
+    public AppConfig.TipoCliente getTipoCliente(){
+        return tipoCliente;
+    }
     
 }

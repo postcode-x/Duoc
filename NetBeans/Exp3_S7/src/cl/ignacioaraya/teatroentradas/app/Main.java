@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class Main {
     
-    public static void main(String[] args){
+    public static void main(String[] args) {
         
         Scanner sc = new Scanner(System.in);
         VentaService ventaService = new VentaService();
@@ -16,7 +16,9 @@ public class Main {
         
         // Menu principal
         do {
-            System.out.println("\n--- Menu de Venta | " + AppConfig.NOMBRE_TEATRO + " (" + ventaService.getAsientosDisponibles() + " asientos disponibles) ---");
+            System.out.println("\n--- Menu de Venta | " 
+                    + AppConfig.NOMBRE_TEATRO 
+                    + " (" + ventaService.getAsientosDisponibles() + " asientos disponibles) ---");
             System.out.println("1. Venta de entradas");
             System.out.println("2. Resumen de ventas");
             System.out.println("3. Generar boleta");
@@ -38,17 +40,16 @@ public class Main {
 
         // Cerrar recursos
         sc.close();
-    
     }
     
     // UI para vender entradas
     private static void venderEntradasUI(Scanner sc, VentaService ventaService) {
-        if(ventaService.getAsientosDisponibles() == 0){
+        if (ventaService.getAsientosDisponibles() == 0) {
             System.out.println("\nNo quedan entradas disponibles.");
             return;
         }
         
-        // Elegir ubicación y tipo de cliente
+        // Elegir ubicacion y tipo de cliente
         AppConfig.Ubicacion ubicacion = seleccionarUbicacion(sc);
         AppConfig.TipoCliente tipoCliente = seleccionarTipoCliente(sc);
         int precio = ventaService.calcularPrecioEntrada(ubicacion, tipoCliente);
@@ -66,7 +67,8 @@ public class Main {
         // Checkout: pagar o cancelar
         do {
             System.out.println("\n=== CHECKOUT ===");
-            System.out.println("Entrada seleccionada: " + ventaService.getCanasta().get(0).mostrar());
+            System.out.println("Entrada seleccionada: " 
+                    + ventaService.getCanasta().get(0).mostrar());
             System.out.println("Total a pagar (con descuento aplicado si corresponde): $" + totalFinal);
 
             int opcion = InputUtils.leerEntero(sc, "1 = Pagar / 0 = Cancelar: ");
@@ -86,15 +88,14 @@ public class Main {
             }
             
         } while (!opcionValida);
-        
     }
     
-    // UI para seleccionar ubicación del asiento
+    // UI para seleccionar ubicacion del asiento
     private static AppConfig.Ubicacion seleccionarUbicacion(Scanner sc) {
         boolean ubicacionSeleccionada = false;
         int opcionUbicacion = -1;
         
-        while(!ubicacionSeleccionada){
+        while (!ubicacionSeleccionada) {
             System.out.println("\n=== ELEGIR UBICACION ===");
             int i = 1;
             for (AppConfig.Ubicacion u : AppConfig.Ubicacion.values()) {
@@ -111,7 +112,7 @@ public class Main {
             }
         }
         
-        return AppConfig.Ubicacion.values()[opcionUbicacion -1];
+        return AppConfig.Ubicacion.values()[opcionUbicacion - 1];
     }
     
     // UI para seleccionar tipo de cliente
@@ -119,7 +120,7 @@ public class Main {
         boolean tipoClienteSeleccionado = false;
         int opcionTipoCliente = -1;
         
-        while(!tipoClienteSeleccionado){
+        while (!tipoClienteSeleccionado) {
             System.out.println("\n=== ELEGIR TIPO CLIENTE ===");
             int i = 1;
             for (AppConfig.TipoCliente u : AppConfig.TipoCliente.values()) {
@@ -136,10 +137,10 @@ public class Main {
             }
         }
         
-        return AppConfig.TipoCliente.values()[opcionTipoCliente -1];
+        return AppConfig.TipoCliente.values()[opcionTipoCliente - 1];
     }
     
-     // UI para resumir ventas
+    // UI para resumir ventas
     private static void resumirVentasUI(Scanner sc, VentaService ventaService) {
         if (ventaService.getEntradasVendidas().isEmpty()) {
             System.out.println("\nNo existen entradas vendidas.");
@@ -150,10 +151,9 @@ public class Main {
         for (Entrada entrada : ventaService.getEntradasVendidas()) {
             System.out.println(entrada.mostrarResumen());
         }
-    
     }
     
-     // UI para generar boletas
+    // UI para generar boletas
     private static void generarBoletaUI(Scanner sc, VentaService ventaService) {
         if (ventaService.getEntradasVendidas().isEmpty()) {
             System.out.println("\nNo existen entradas vendidas.");
@@ -179,7 +179,7 @@ public class Main {
         }
     }
     
-     // UI para calcular ingresos
+    // UI para calcular ingresos
     private static void calcularIngresosUI(Scanner sc, VentaService ventaService) {
         if (ventaService.getEntradasVendidas().isEmpty()) {
             System.out.println("\nNo existen entradas vendidas.");
@@ -187,7 +187,5 @@ public class Main {
         }
         System.out.println("\nLos ingresos totales son de: $" + ventaService.getIngresosTotales());
     }
-    
-    
     
 }

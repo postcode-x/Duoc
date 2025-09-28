@@ -5,13 +5,19 @@ import java.util.ArrayList;
 import java.util.List;
 import cl.ignacioaraya.teatroentradas.model.Entrada;
 
+
+// Clase de servicio de venta
 public class VentaService {
+    
     // Lista global con todas las entradas vendidas (persisten después de confirmar)
     private static final List<Entrada> entradasVendidas = new ArrayList<>();
+    
     // Canasta temporal de entradas (compra en curso, antes de confirmar)
     private final List<Entrada> canasta = new ArrayList<>();
+    
     // Contador incremental para asignar número único a cada entrada
     private static int contadorEntradas = 0;
+    
     // Ingresos totales
     private static int ingresosTotales = 0;
 
@@ -86,6 +92,5 @@ public class VentaService {
     public int getIngresosTotales(){
         return ingresosTotales; 
     }
-    
     
 }
