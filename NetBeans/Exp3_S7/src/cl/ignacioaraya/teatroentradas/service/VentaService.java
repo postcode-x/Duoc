@@ -60,6 +60,7 @@ public class VentaService {
 
     // Cancela la compra: vacía la canasta sin guardar
     public void cancelarCompra() {
+        contadorEntradas--;
         canasta.clear();
     }
     
