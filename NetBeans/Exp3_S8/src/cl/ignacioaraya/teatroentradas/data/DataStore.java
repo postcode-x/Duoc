@@ -21,7 +21,9 @@ public class DataStore {
     public static List<Evento> eventos = new ArrayList<>();
     public static List<Descuento> descuentos = new ArrayList<>();
     
-    public static int nextClienteId = 4; // OJO: Este valor continua desde el Inicializador, línea 13
+    // Contador incremental de id clientes. 
+    // OJO: Este valor continua desde el Inicializador, línea 13
+    public static int nextClienteId = 4; 
     
     // ---------------------------------
     // Clientes
