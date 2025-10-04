@@ -1,5 +1,6 @@
 package cl.ignacioaraya.teatroentradas.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Venta {
@@ -19,6 +20,7 @@ public class Venta {
     // Fecha de la venta
     private Date fecha;
     
+    // Evento al que pertenece la venta
     private Evento evento;
 
     // Constructor
@@ -65,17 +67,20 @@ public class Venta {
     }
     
     public Evento getEvento() { return evento; }
+    
     public void setEvento(Evento evento) { this.evento = evento; }
 
     // Representación legible de la venta
     @Override
     public String toString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm");
         return "Venta ( " +
                 "Id: " + id +
                 ", Cliente: " + cliente.getNombre() +
+                ", Evento: " + getEvento().getNombre() +
                 ", Asiento: " + asiento.getNumero() + " (" + asiento.getFila() + "-" + asiento.getColumna() + ")" +
-                ", Precio: $" + precio +
-                ", Fecha: " + fecha +
+                ", Precio: $" + (int)precio +
+                ", Fecha: " + sdf.format(fecha) +
                 " )";
     }
 }
