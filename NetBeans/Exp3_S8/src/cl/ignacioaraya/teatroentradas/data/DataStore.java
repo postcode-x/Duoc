@@ -2,6 +2,8 @@ package cl.ignacioaraya.teatroentradas.data;
 
 import cl.ignacioaraya.teatroentradas.config.AppConfig;
 import cl.ignacioaraya.teatroentradas.model.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataStore {
 
@@ -14,6 +16,10 @@ public class DataStore {
     public static int clienteCount = 0;
     public static int asientoCount = 0;
     public static int ventaCount   = 0;
+    
+    // Listas dinámicas
+    public static List<Evento> eventos = new ArrayList<>();
+    public static List<Descuento> descuentos = new ArrayList<>();
     
     // ---------------------------------
     // Clientes
@@ -50,5 +56,19 @@ public class DataStore {
         } else {
             System.out.println("No se pueden registrar mas ventas.");
         }
+    }
+    
+    public static void eliminarVenta(int id) {
+        for (int i = 0; i < ventaCount; i++) {
+            if (ventas[i] != null && ventas[i].getId() == id) {
+                for (int j = i; j < ventaCount - 1; j++) {
+                    ventas[j] = ventas[j + 1];
+                }
+                ventas[--ventaCount] = null;
+                System.out.println("Venta eliminada correctamente.");
+                return;
+            }
+        }
+        System.out.println("Venta con ID " + id + " no encontrada.");
     }
 }

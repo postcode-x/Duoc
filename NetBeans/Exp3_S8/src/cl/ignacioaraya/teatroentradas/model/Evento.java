@@ -53,6 +53,11 @@ public class Evento {
             ventas.add(venta);
         }
     }
+    
+    // Método para eliminar una venta específica del evento
+    public boolean eliminarVenta(int ventaId) {
+        return ventas.removeIf(v -> v.getId() == ventaId);
+    }
 
     // Método para mostrar información del evento
     @Override
