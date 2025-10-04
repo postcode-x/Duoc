@@ -38,7 +38,6 @@ public class Evento {
         return fecha;
     }
 
-
     public List<Venta> getVentas() {
         return ventas;
     }
@@ -62,11 +61,11 @@ public class Evento {
     // Método para mostrar información del evento
     @Override
     public String toString() {
-        return "Evento { " +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                ", fecha=" + fecha +
-                ", ventas=" + ventas.size() +
-                " }";
+        return "Evento ( " +
+                "id: " + id +
+                ", Nombre: '" + nombre + '\'' +
+                ", Fecha: " + fecha +
+                ", Ventas: " + ventas.size() +
+                " )";
     }
 }
