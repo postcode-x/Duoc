@@ -16,7 +16,7 @@ public class AppConfig {
     // Capacidades arreglos
     public static final int MAX_CLIENTES = 100;
     public static final int MAX_VENTAS   = 100;
-    public static final int MAX_ASIENTOS = 20; // Debe ser divisible por COLUMNAS_POR_FILEA
+    public static final int MAX_ASIENTOS = 20; // Debe ser divisible por COLUMNAS_POR_FILA
     
     // Supongamos que la sala es rectangular: filas de 10 columnas
     public static final int COLUMNAS_POR_FILA = 10; 
