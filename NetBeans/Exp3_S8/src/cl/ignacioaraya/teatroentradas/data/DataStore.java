@@ -96,7 +96,8 @@ public class DataStore {
         }
     }
     
-    public static void eliminarVenta(int id) {
+    // Elimina una venta singular
+    public static void eliminarVentaSimple(int id) {
         for (int i = 0; i < ventaCount; i++) {
             if (ventas[i] != null && ventas[i].getId() == id) {
                 for (int j = i; j < ventaCount - 1; j++) {
@@ -109,4 +110,5 @@ public class DataStore {
         }
         System.out.println("Venta con ID " + id + " no encontrada.");
     }
+    
 }
