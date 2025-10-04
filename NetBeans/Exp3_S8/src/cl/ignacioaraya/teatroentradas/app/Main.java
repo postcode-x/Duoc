@@ -214,19 +214,20 @@ public class Main {
         System.out.println("Cliente eliminado correctamente.");
     }
     
+    // Listar clientes actualmente registrados
     private static void listarClientes(){
         if (DataStore.clienteCount == 0) {
             System.out.println("No hay clientes registrados.");
             return;
         }
         
+        System.out.println("\n--- Lista de Clientes ---");
         for (int i = 0; i < DataStore.clienteCount; i++) {
             Cliente c = DataStore.clientes[i];
             if (c != null) {
                 System.out.println((i + 1) + ". " +  c.getNombre() + " (" + c.getTipo().obtenerNombre() + ")" + " (ID: " + c.getId() + ")");
             }
         }
-        
     }
     
     // UI para mostrar layout con asientos del teatro
