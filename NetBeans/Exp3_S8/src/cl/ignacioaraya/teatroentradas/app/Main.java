@@ -35,7 +35,7 @@ public class Main {
                 //case 1 -> gestionarClientesUI(sc);
                 //case 2 -> mostrarAsientosTeatroUI(sc);
                 //case 3 -> venderEntradaUI(sc);
-                //case 4 -> configurarDescuentosUI(sc);
+                case 4 -> configurarDescuentosUI(sc);
                 case 5 -> gestionarVentasUI(sc);
                 default -> System.out.println("Opcion invalida.");
             }
@@ -46,6 +46,29 @@ public class Main {
         sc.close();
     
     }
+    
+    // UI para activar o desactivar descuentos
+    private static void configurarDescuentosUI(Scanner sc){
+        boolean salir = false; 
+        do {
+            System.out.println("\n--- CONFIGURAR DESCUENTOS ---");
+            for(Descuento descuento: DataStore.descuentos){
+                System.out.println( (DataStore.descuentos.indexOf(descuento) + 1)+ ")" + descuento.toString() + " - estado: " + (descuento.getEstado() == true ? "Activo" : "Inactivo"));
+            }
+            System.out.println("0) Salir a menu principal");
+            
+            int opcion = InputUtils.leerEntero(sc, "\nPara activar o desactivar un descuento, ingresa el numero correspondiente: ");
+            if (opcion > 0  && opcion <= DataStore.descuentos.size()) {
+                boolean estado = DataStore.descuentos.get(opcion - 1).getEstado();
+                DataStore.descuentos.get(opcion - 1).setEstado(!estado);
+            } else if (opcion == 0){
+                salir = true;
+            } else {
+                System.out.println("\nOpcion no valida, intente nuevamente.");
+            }
+            
+        } while (!salir);
+    }   
     
     // UI para gestionar ventas (listar, eliminar)
     private static void gestionarVentasUI(Scanner sc) {

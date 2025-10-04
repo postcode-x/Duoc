@@ -24,5 +24,14 @@ public class Inicializador {
                 }
             }
         }
+        
+        // Evento de ejemplo
+        Evento evento1 = new Evento(1, "Obra: Esperando a Godot", new java.util.Date(126, 1, 15)); // year-1900
+        DataStore.eventos.add(evento1);
+
+        // Descuentos solicitados
+        DataStore.descuentos.add(new Descuento(AppConfig.TipoCliente.ESTUDIANTE, AppConfig.DESCUENTO_ESTUDIANTE / 100.0));
+        DataStore.descuentos.add(new Descuento(AppConfig.TipoCliente.ADULTO_MAYOR, AppConfig.DESCUENTO_ADULTO_MAYOR / 100.0));
+        
     }
 }
