@@ -6,6 +6,7 @@ import cl.ignacioaraya.teatroentradas.data.Inicializador;
 import cl.ignacioaraya.teatroentradas.model.Descuento;
 import cl.ignacioaraya.teatroentradas.model.Evento;
 import cl.ignacioaraya.teatroentradas.model.Venta;
+import cl.ignacioaraya.teatroentradas.service.VentaService;
 import cl.ignacioaraya.teatroentradas.util.InputUtils;
 import java.util.Scanner;
 
@@ -14,8 +15,10 @@ public class Main {
     
     public static void main(String[] args) {
         
-        Inicializador.cargarDatos();
         Scanner sc = new Scanner(System.in);
+        Inicializador.cargarDatos();
+        VentaService ventaService = new VentaService();
+
         int opcion;
 
         // Menu principal
@@ -26,14 +29,14 @@ public class Main {
             System.out.println("2. Mostrar asientos");
             System.out.println("3. Vender entradas");
             System.out.println("4. Configurar descuentos");
-            System.out.println("5. Listar Ventas (Reporte)");
+            System.out.println("5. Gestionar Ventas");
             System.out.println("6. Salir");
 
             opcion = InputUtils.leerEntero(sc, "\nSeleccione una opcion: ");
 
             switch (opcion) {
                 //case 1 -> gestionarClientesUI(sc);
-                //case 2 -> mostrarAsientosTeatroUI(sc);
+                case 2 -> mostrarAsientosTeatroUI(ventaService);
                 //case 3 -> venderEntradaUI(sc);
                 case 4 -> configurarDescuentosUI(sc);
                 case 5 -> gestionarVentasUI(sc);
@@ -46,6 +49,16 @@ public class Main {
         sc.close();
     
     }
+    
+    // UI para gestionar clientes
+    
+    // UI para mostrar layout con asientos del teatro
+    private static void mostrarAsientosTeatroUI(VentaService ventaService){
+        System.out.println("\n--- ASIENTOS ---\n");
+        System.out.print(ventaService.mostrar());
+    }
+    
+    // UI para vender entradas
     
     // UI para activar o desactivar descuentos
     private static void configurarDescuentosUI(Scanner sc){
@@ -147,6 +160,8 @@ public class Main {
         for (Evento evento : DataStore.eventos){
             evento.eliminarVenta(idVenta);
         }
+        
+        // Libera Asiento TODO
                 
         System.out.println("Cliente eliminado correctamente.");
     }
