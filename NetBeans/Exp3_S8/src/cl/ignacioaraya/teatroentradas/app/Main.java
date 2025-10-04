@@ -9,6 +9,7 @@ import cl.ignacioaraya.teatroentradas.model.Evento;
 import cl.ignacioaraya.teatroentradas.model.Venta;
 import cl.ignacioaraya.teatroentradas.service.VentaService;
 import cl.ignacioaraya.teatroentradas.util.InputUtils;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
 
@@ -28,6 +29,7 @@ public class Main {
             System.out.println("\n--- Menu de Venta | " 
                     + AppConfig.NOMBRE_TEATRO
                     + " (" + ventaService.getAsientosDisponibles() + " asientos disponibles) ---");
+            System.out.println("--- " + evento.getNombre() + " ---");
             System.out.println("1. Gestionar clientes");
             System.out.println("2. Mostrar asientos");
             System.out.println("3. Vender entradas");
@@ -43,6 +45,7 @@ public class Main {
                 case 3 -> venderEntradaUI(sc, ventaService, evento);
                 case 4 -> configurarDescuentosUI(sc);
                 case 5 -> gestionarVentasUI(sc);
+                case 6 -> System.out.println("\nHasta luego!");
                 default -> System.out.println("Opcion invalida.");
             }
 
@@ -61,6 +64,7 @@ public class Main {
             System.out.println("1. Registrar cliente");
             System.out.println("2. Actualizar cliente");
             System.out.println("3. Eliminar cliente");
+            System.out.println("4. Listar clientes");
             System.out.println("0. Volver al menu principal");
 
             int opcion = InputUtils.leerEntero(sc, "\nSeleccione una opcion: ");
@@ -69,6 +73,7 @@ public class Main {
                 case 1 -> registrarCliente(sc);
                 case 2 -> actualizarCliente(sc);
                 case 3 -> eliminarCliente(sc);
+                case 4 -> listarClientes();
                 case 0 -> salir = true;
                 default -> System.out.println("Opcion no valida.");
             }
@@ -79,7 +84,7 @@ public class Main {
     private static void registrarCliente(Scanner sc) {
         System.out.println("\n--- Registro de Cliente ---");
 
-        int id = DataStore.clienteCount + 1;
+        int id = DataStore.obtenerSiguienteClienteId();
 
         String nombre;
         do {
@@ -126,7 +131,8 @@ public class Main {
             }
         }
 
-        int opcion = InputUtils.leerEntero(sc, "Seleccione cliente a actualizar: ");
+        int opcion = InputUtils.leerEntero(sc, "Seleccione cliente a actualizar (0 para volver): ");
+        if(opcion == 0) return;
         if (opcion < 1 || opcion > DataStore.clienteCount) {
             System.out.println("Opcion invalida.");
             return;
@@ -162,6 +168,8 @@ public class Main {
         }
 
         System.out.println("\n--- Eliminar Cliente ---");
+        System.out.println("--- IMPORTANTE: Se eliminaran las entradas y se");
+        System.out.println("--- liberaran los asientos asociados al cliente");
         for (int i = 0; i < DataStore.clienteCount; i++) {
             Cliente c = DataStore.clientes[i];
             if (c != null) {
@@ -169,9 +177,10 @@ public class Main {
             }
         }
 
-        int opcion = InputUtils.leerEntero(sc, "Seleccione cliente a eliminar: ");
+        int opcion = InputUtils.leerEntero(sc, "Seleccione cliente a eliminar (0 para volver): ");
+        if(opcion == 0) return;
         if (opcion < 1 || opcion > DataStore.clienteCount) {
-            System.out.println("Opción inválida.");
+            System.out.println("Opcion invalida.");
             return;
         }
 
@@ -187,11 +196,9 @@ public class Main {
                 if(v.getCliente().getId() == idCliente){
                     
                     int idVenta = v.getId();
+                    
                     // Liberar asiento
                     DataStore.liberarAsiento(v.getAsiento().getNumero());
-
-                    // Elimina venta de array
-                    //DataStore.eliminarVenta(idVenta);
 
                     // Elimina venta desde la lista que habita evento
                     for (Evento evento : DataStore.eventos){
@@ -201,7 +208,25 @@ public class Main {
             }
         }
         
+        // Limpia y ordena DataStore.ventas
+        DataStore.eliminarVentasYCompactar(idCliente);
+        
         System.out.println("Cliente eliminado correctamente.");
+    }
+    
+    private static void listarClientes(){
+        if (DataStore.clienteCount == 0) {
+            System.out.println("No hay clientes registrados.");
+            return;
+        }
+        
+        for (int i = 0; i < DataStore.clienteCount; i++) {
+            Cliente c = DataStore.clientes[i];
+            if (c != null) {
+                System.out.println((i + 1) + ". " +  c.getNombre() + " (" + c.getTipo().obtenerNombre() + ")" + " (ID: " + c.getId() + ")");
+            }
+        }
+        
     }
     
     // UI para mostrar layout con asientos del teatro
@@ -239,13 +264,16 @@ public class Main {
         do {
             
             Venta venta = ventaService.venderEntrada(clienteSeleccionado, evento);
+            SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm");
 
             if (venta != null) {
                 System.out.println("\nVenta realizada con exito.");
-                System.out.println("Cliente: " + venta.getCliente().getNombre());
+                System.out.println("Cliente: " + venta.getCliente().getNombre());                
+                System.out.println("Evento: " + evento.getNombre());
                 System.out.println("Asiento: " + venta.getAsiento().getNumero() + " (" +
                                    venta.getAsiento().getFila() + "-" + venta.getAsiento().getColumna() + ")");
-                System.out.println("Precio final: $" + venta.getPrecio());
+                System.out.println("Fecha evento: " + sdf.format(venta.getEvento().getFecha()));
+                System.out.println("Precio final: $" + (int)venta.getPrecio());
                 
                 seguirComprando = preguntaSeguirComprando(sc);
                 
@@ -330,14 +358,15 @@ public class Main {
             if (venta != null) {
                 System.out.println("Venta #" + venta.getId() 
                     + " | Cliente: " + venta.getCliente().getNombre()
+                    + " | Evento: " + venta.getEvento().getNombre()
                     + " | Asiento: " + venta.getAsiento().getNumero()
                     + " (" + venta.getAsiento().getFila() + "-" + venta.getAsiento().getColumna() + ")"
-                    + " | Precio: $" + venta.getPrecio());
+                    + " | Precio: $" + (int)venta.getPrecio());
                 total += venta.getPrecio();
             }
         }
 
-        System.out.println("\nTotal recaudado: $" + total);
+        System.out.println("\nTotal recaudado: $" + (int)total);
     }
     
     // Eliminar venta existente
@@ -355,7 +384,8 @@ public class Main {
             }
         }
 
-        int opcion = InputUtils.leerEntero(sc, "Seleccione venta a eliminar: ");
+        int opcion = InputUtils.leerEntero(sc, "Seleccione venta a eliminar (0 para volver): ");
+        if(opcion == 0) return;
         if (opcion < 1 || opcion > DataStore.ventaCount) {
             System.out.println("Opcion invalida.");
             return;
