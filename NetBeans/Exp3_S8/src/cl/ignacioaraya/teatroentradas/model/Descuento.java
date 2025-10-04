@@ -47,9 +47,9 @@ public class Descuento {
     // Método para mostrar información del descuento
     @Override
     public String toString() {
-        return " Descuento { " +
-                "tipoCliente: " + tipoCliente.obtenerNombre() +
-                ", porcentaje: " + (porcentaje * 100) + "%" +
-                " }";
+        return " Descuento ( " +
+                "Tipo de Cliente: " + tipoCliente.obtenerNombre() +
+                ", Porcentaje: " + (porcentaje * 100) + "%" +
+                " )";
     }
 }
