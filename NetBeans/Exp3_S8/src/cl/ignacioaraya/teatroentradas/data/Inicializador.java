@@ -8,7 +8,7 @@ public class Inicializador {
     public static void cargarDatos() {
         
         // Cliente de prueba
-        //DataStore.agregarCliente(new Cliente(1, "Juan Perez", AppConfig.TipoCliente.ESTUDIANTE));
+        DataStore.agregarCliente(new Cliente(1, "Juan Perez", AppConfig.TipoCliente.ESTUDIANTE));
 
         // Asientos: inicializar todos según CAPACIDAD
         int capacidad = AppConfig.MAX_ASIENTOS;

@@ -46,6 +46,18 @@ public class DataStore {
         }
     }
     
+    public static void liberarAsiento(int numeroAsiento) {
+        for (int i = 0; i < asientoCount; i++) {
+            Asiento asiento = asientos[i];
+            if (asiento != null && asiento.getNumero() == numeroAsiento) {
+                asiento.setDisponible(); // lo marca como DISPONIBLE
+                System.out.println("Asiento " + numeroAsiento + " liberado correctamente.");
+                return;
+            }
+        }
+        System.out.println("Asiento con número " + numeroAsiento + " no encontrado.");
+    }
+    
     // ---------------------------------
     // Ventas
     // ---------------------------------
@@ -64,7 +76,8 @@ public class DataStore {
                 for (int j = i; j < ventaCount - 1; j++) {
                     ventas[j] = ventas[j + 1];
                 }
-                ventas[--ventaCount] = null;
+                ventas[ventaCount] = null;
+                ventaCount--;
                 System.out.println("Venta eliminada correctamente.");
                 return;
             }

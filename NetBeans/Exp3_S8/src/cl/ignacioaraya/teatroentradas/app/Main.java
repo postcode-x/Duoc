@@ -3,6 +3,7 @@ package cl.ignacioaraya.teatroentradas.app;
 import cl.ignacioaraya.teatroentradas.config.AppConfig;
 import cl.ignacioaraya.teatroentradas.data.DataStore;
 import cl.ignacioaraya.teatroentradas.data.Inicializador;
+import cl.ignacioaraya.teatroentradas.model.Cliente;
 import cl.ignacioaraya.teatroentradas.model.Descuento;
 import cl.ignacioaraya.teatroentradas.model.Evento;
 import cl.ignacioaraya.teatroentradas.model.Venta;
@@ -18,13 +19,15 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         Inicializador.cargarDatos();
         VentaService ventaService = new VentaService();
-
+        Evento evento = DataStore.eventos.get(0);
+        
         int opcion;
 
         // Menu principal
         do {
-            System.out.println("\n--- Menu de Venta | " + AppConfig.NOMBRE_TEATRO);
-                    //+ " (" + ventaService.getAsientosDisponibles() + " asientos disponibles) ---");
+            System.out.println("\n--- Menu de Venta | " 
+                    + AppConfig.NOMBRE_TEATRO
+                    + " (" + ventaService.getAsientosDisponibles() + " asientos disponibles) ---");
             System.out.println("1. Gestionar clientes");
             System.out.println("2. Mostrar asientos");
             System.out.println("3. Vender entradas");
@@ -37,7 +40,7 @@ public class Main {
             switch (opcion) {
                 //case 1 -> gestionarClientesUI(sc);
                 case 2 -> mostrarAsientosTeatroUI(ventaService);
-                //case 3 -> venderEntradaUI(sc);
+                case 3 -> venderEntradaUI(sc, ventaService, evento);
                 case 4 -> configurarDescuentosUI(sc);
                 case 5 -> gestionarVentasUI(sc);
                 default -> System.out.println("Opcion invalida.");
@@ -59,6 +62,65 @@ public class Main {
     }
     
     // UI para vender entradas
+    private static void venderEntradaUI(Scanner sc, VentaService ventaService, Evento evento) {
+        System.out.println("\n--- VENTA DE ENTRADA ---");
+
+        // Mostrar lista de clientes disponibles
+        if (DataStore.clienteCount == 0) {
+            System.out.println("No hay clientes registrados. Registre un cliente primero.");
+            return;
+        }
+
+        System.out.println("Seleccione un cliente:");
+        for (int i = 0; i < DataStore.clienteCount; i++) {
+            Cliente cliente = DataStore.clientes[i];
+            if (cliente != null) {
+                System.out.println((i + 1) + ". " + cliente.getNombre() + " (" + cliente.getTipo().obtenerNombre() + ")");
+            }
+        }
+
+        int opcionCliente;
+        do {
+            opcionCliente = InputUtils.leerEntero(sc, "Opcion cliente: ");
+        } while (opcionCliente < 1 || opcionCliente > DataStore.clienteCount);
+
+        Cliente clienteSeleccionado = DataStore.clientes[opcionCliente - 1];
+        
+        boolean seguirComprando = true;
+        do {
+            
+            Venta venta = ventaService.venderEntrada(clienteSeleccionado, evento);
+
+            if (venta != null) {
+                System.out.println("\nVenta realizada con exito.");
+                System.out.println("Cliente: " + venta.getCliente().getNombre());
+                System.out.println("Asiento: " + venta.getAsiento().getNumero() + " (" +
+                                   venta.getAsiento().getFila() + "-" + venta.getAsiento().getColumna() + ")");
+                System.out.println("Precio final: $" + venta.getPrecio());
+                
+                seguirComprando = preguntaSeguirComprando(sc);
+                
+            } else {
+                System.out.println("\nNo se pudo realizar la venta (no hay asientos disponibles).");
+                seguirComprando = false;
+            }
+            
+        } while (seguirComprando);
+
+    }
+    
+    // Pregunta al usuario si desea seguir comprando
+    private static boolean preguntaSeguirComprando(Scanner sc) {
+        int opcionSeguir;
+        do {
+            opcionSeguir = InputUtils.leerEntero(sc, "Desea comprar otro asiento? 1 = Si / 0 = No: ");
+            if (opcionSeguir != 0 && opcionSeguir != 1) {
+                System.out.println("Opcion no valida, intente nuevamente.");
+            }
+        } while (opcionSeguir != 0 && opcionSeguir != 1);
+
+        return opcionSeguir == 1;
+    }
     
     // UI para activar o desactivar descuentos
     private static void configurarDescuentosUI(Scanner sc){
@@ -153,6 +215,9 @@ public class Main {
         Venta venta = DataStore.ventas[opcion - 1];
         int idVenta = venta.getId();
         
+        // Liberar asiento
+        DataStore.liberarAsiento(venta.getAsiento().getNumero());
+        
         // Elimina venta de array
         DataStore.eliminarVenta(idVenta);
         
@@ -160,10 +225,8 @@ public class Main {
         for (Evento evento : DataStore.eventos){
             evento.eliminarVenta(idVenta);
         }
-        
-        // Libera Asiento TODO
                 
-        System.out.println("Cliente eliminado correctamente.");
+        System.out.println("Venta eliminada correctamente.");
     }
     
 }

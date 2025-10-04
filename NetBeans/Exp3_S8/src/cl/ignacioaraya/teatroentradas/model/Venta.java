@@ -70,12 +70,12 @@ public class Venta {
     // Representación legible de la venta
     @Override
     public String toString() {
-        return "Venta { " +
-                "id=" + id +
-                ", cliente=" + cliente.getNombre() +
-                ", asiento=" + asiento.getNumero() + " (" + asiento.getFila() + "-" + asiento.getColumna() + ")" +
-                ", precio=" + precio +
-                ", fecha=" + fecha +
-                " }";
+        return "Venta ( " +
+                "Id: " + id +
+                ", Cliente: " + cliente.getNombre() +
+                ", Asiento: " + asiento.getNumero() + " (" + asiento.getFila() + "-" + asiento.getColumna() + ")" +
+                ", Precio: $" + precio +
+                ", Fecha: " + fecha +
+                " )";
     }
 }
