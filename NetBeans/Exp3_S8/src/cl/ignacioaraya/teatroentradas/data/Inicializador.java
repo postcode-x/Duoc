@@ -28,7 +28,7 @@ public class Inicializador {
         }
         
         // Evento de ejemplo
-        Evento evento1 = new Evento(1, "Obra: Esperando a Godot", new java.util.Date(126, 1, 15)); // year-1900
+        Evento evento1 = new Evento(1, "Obra de teatro \"Esperando a Godot\"", new java.util.Date(126, 1, 15)); // year-1900
         DataStore.eventos.add(evento1);
 
         // Descuentos solicitados
