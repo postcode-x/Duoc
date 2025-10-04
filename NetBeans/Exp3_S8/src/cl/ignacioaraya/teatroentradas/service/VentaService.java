@@ -7,6 +7,8 @@ import java.util.Date;
 
 public class VentaService {
     
+    // Contador estático de ids de venta, se incrementa siempre para evitar
+    // que dos ventas tengan el mismo id.
     private static int idVenta = 1;
     
     // Vende una entrada a un cliente para un evento específico
@@ -36,13 +38,12 @@ public class VentaService {
         //int idVenta = DataStore.ventaCount + 1; // ID secuencial
         Venta venta = new Venta(idVenta, cliente, asientoDisponible, precioFinal, new Date(), evento);
         idVenta++;
+        
         // Guardar en DataStore
         DataStore.agregarVenta(venta);
 
         // Asociar venta al evento
         evento.agregarVenta(venta);
-
-        System.out.println("Venta realizada: " + venta);
 
         return venta;
     }
