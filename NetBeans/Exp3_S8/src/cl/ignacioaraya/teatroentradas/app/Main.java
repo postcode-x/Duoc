@@ -368,7 +368,7 @@ public class Main {
         DataStore.liberarAsiento(venta.getAsiento().getNumero());
         
         // Elimina venta de array
-        DataStore.eliminarVenta(idVenta);
+        DataStore.eliminarVentaSimple(idVenta);
         
         // Elimina venta desde la lista que habita evento
         for (Evento evento : DataStore.eventos){
