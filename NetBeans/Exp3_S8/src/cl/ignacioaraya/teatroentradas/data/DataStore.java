@@ -33,6 +33,32 @@ public class DataStore {
         }
     }
     
+    public static void actualizarCliente(int id, String nuevoNombre, AppConfig.TipoCliente nuevoTipo) {
+        for (int i = 0; i < clienteCount; i++) {
+            if (clientes[i] != null && clientes[i].getId() == id) {
+                clientes[i].setNombre(nuevoNombre);
+                clientes[i].setTipo(nuevoTipo);
+                return;
+            }
+        }
+        System.out.println("Cliente con ID " + id + " no encontrado.");
+    }
+
+    public static void eliminarCliente(int id) {
+        for (int i = 0; i < clienteCount; i++) {
+            if (clientes[i] != null && clientes[i].getId() == id) {
+                // mover todos los elementos posteriores una posición atrás
+                for (int j = i; j < clienteCount - 1; j++) {
+                    clientes[j] = clientes[j + 1];
+                }
+                clientes[clienteCount] = null;
+                --clienteCount;
+                return;
+            }
+        }
+        System.out.println("Cliente con ID " + id + " no encontrado.");
+    }
+    
     
     // ---------------------------------
     // Asientos
@@ -78,7 +104,6 @@ public class DataStore {
                 }
                 ventas[ventaCount] = null;
                 ventaCount--;
-                System.out.println("Venta eliminada correctamente.");
                 return;
             }
         }

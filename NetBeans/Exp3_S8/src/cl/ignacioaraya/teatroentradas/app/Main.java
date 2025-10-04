@@ -38,7 +38,7 @@ public class Main {
             opcion = InputUtils.leerEntero(sc, "\nSeleccione una opcion: ");
 
             switch (opcion) {
-                //case 1 -> gestionarClientesUI(sc);
+                case 1 -> gestionarClientesUI(sc);
                 case 2 -> mostrarAsientosTeatroUI(ventaService);
                 case 3 -> venderEntradaUI(sc, ventaService, evento);
                 case 4 -> configurarDescuentosUI(sc);
@@ -53,7 +53,156 @@ public class Main {
     
     }
     
-    // UI para gestionar clientes
+    // UI para gestionar clientes (registrar, actualizar, eliminar)
+    private static void gestionarClientesUI(Scanner sc) {
+        boolean salir = false;
+        do {
+            System.out.println("\n--- GESTION DE CLIENTES ---");
+            System.out.println("1. Registrar cliente");
+            System.out.println("2. Actualizar cliente");
+            System.out.println("3. Eliminar cliente");
+            System.out.println("0. Volver al menu principal");
+
+            int opcion = InputUtils.leerEntero(sc, "\nSeleccione una opcion: ");
+
+            switch (opcion) {
+                case 1 -> registrarCliente(sc);
+                case 2 -> actualizarCliente(sc);
+                case 3 -> eliminarCliente(sc);
+                case 0 -> salir = true;
+                default -> System.out.println("Opcion no valida.");
+            }
+        } while (!salir);
+    }
+    
+    // Registrar cliente nuevo
+    private static void registrarCliente(Scanner sc) {
+        System.out.println("\n--- Registro de Cliente ---");
+
+        int id = DataStore.clienteCount + 1;
+
+        String nombre;
+        do {
+            System.out.print("Ingrese nombre del cliente: ");
+            nombre = sc.nextLine().trim();
+            if (nombre.isEmpty()) {
+                System.out.println("El nombre no puede estar vacio.");
+            }
+        } while (nombre.isEmpty());
+
+        // Mostrar opciones de tipo cliente
+        System.out.println("Seleccione tipo de cliente:");
+        AppConfig.TipoCliente[] tipos = AppConfig.TipoCliente.values();
+        for (int i = 0; i < tipos.length; i++) {
+            System.out.println((i + 1) + ". " + tipos[i].obtenerNombre());
+        }
+
+        int opcionTipo;
+        do {
+            opcionTipo = InputUtils.leerEntero(sc, "Opcion: ");
+        } while (opcionTipo < 1 || opcionTipo > tipos.length);
+
+        AppConfig.TipoCliente tipoSeleccionado = tipos[opcionTipo - 1];
+
+        Cliente cliente = new Cliente(id, nombre, tipoSeleccionado);
+        DataStore.agregarCliente(cliente);
+
+        System.out.println("Cliente registrado: " + cliente.getNombre() + 
+                           " (" + cliente.getTipo().obtenerNombre() + ")");
+    }
+
+    // Actualizar cliente existente
+    private static void actualizarCliente(Scanner sc) {
+        if (DataStore.clienteCount == 0) {
+            System.out.println("No hay clientes registrados.");
+            return;
+        }
+
+        System.out.println("\n--- Actualizar Cliente ---");
+        for (int i = 0; i < DataStore.clienteCount; i++) {
+            Cliente c = DataStore.clientes[i];
+            if (c != null) {
+                System.out.println((i + 1) + ". " + c.getNombre() + " (" + c.getTipo().obtenerNombre() + ")");
+            }
+        }
+
+        int opcion = InputUtils.leerEntero(sc, "Seleccione cliente a actualizar: ");
+        if (opcion < 1 || opcion > DataStore.clienteCount) {
+            System.out.println("Opcion invalida.");
+            return;
+        }
+
+        Cliente cliente = DataStore.clientes[opcion - 1];
+
+        System.out.print("Nuevo nombre (actual: " + cliente.getNombre() + "): ");
+        String nuevoNombre = sc.nextLine().trim();
+        if (!nuevoNombre.isEmpty()) {
+            cliente.setNombre(nuevoNombre);
+        }
+
+        System.out.println("Seleccione nuevo tipo de cliente (actual: " + cliente.getTipo().obtenerNombre() + "):");
+        AppConfig.TipoCliente[] tipos = AppConfig.TipoCliente.values();
+        for (int i = 0; i < tipos.length; i++) {
+            System.out.println((i + 1) + ". " + tipos[i].obtenerNombre());
+        }
+
+        int opcionTipo = InputUtils.leerEntero(sc, "Opcion: ");
+        if (opcionTipo >= 1 && opcionTipo <= tipos.length) {
+            cliente.setTipo(tipos[opcionTipo - 1]);
+        }
+
+        System.out.println("Cliente actualizado correctamente.");
+    }
+
+    // Eliminar cliente existente
+    private static void eliminarCliente(Scanner sc) {
+        if (DataStore.clienteCount == 0) {
+            System.out.println("No hay clientes registrados.");
+            return;
+        }
+
+        System.out.println("\n--- Eliminar Cliente ---");
+        for (int i = 0; i < DataStore.clienteCount; i++) {
+            Cliente c = DataStore.clientes[i];
+            if (c != null) {
+                System.out.println((i + 1) + ". " + c.getNombre() + " (" + c.getTipo().obtenerNombre() + ")");
+            }
+        }
+
+        int opcion = InputUtils.leerEntero(sc, "Seleccione cliente a eliminar: ");
+        if (opcion < 1 || opcion > DataStore.clienteCount) {
+            System.out.println("Opción inválida.");
+            return;
+        }
+
+        Cliente cliente = DataStore.clientes[opcion - 1];
+        
+        int idCliente = cliente.getId();
+        DataStore.eliminarCliente(idCliente);
+        
+        // Eliminar ventas asociadas al cliente
+        for (int i = 0; i < DataStore.ventaCount; i++) {
+            Venta v = DataStore.ventas[i];
+            if (v != null) {
+                if(v.getCliente().getId() == idCliente){
+                    
+                    int idVenta = v.getId();
+                    // Liberar asiento
+                    DataStore.liberarAsiento(v.getAsiento().getNumero());
+
+                    // Elimina venta de array
+                    //DataStore.eliminarVenta(idVenta);
+
+                    // Elimina venta desde la lista que habita evento
+                    for (Evento evento : DataStore.eventos){
+                        evento.eliminarVenta(idVenta);
+                    }
+                }
+            }
+        }
+        
+        System.out.println("Cliente eliminado correctamente.");
+    }
     
     // UI para mostrar layout con asientos del teatro
     private static void mostrarAsientosTeatroUI(VentaService ventaService){
