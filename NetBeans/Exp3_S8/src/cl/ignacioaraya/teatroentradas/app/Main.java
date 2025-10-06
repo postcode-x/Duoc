@@ -10,6 +10,7 @@ import cl.ignacioaraya.teatroentradas.model.Venta;
 import cl.ignacioaraya.teatroentradas.service.VentaService;
 import cl.ignacioaraya.teatroentradas.util.InputUtils;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.Scanner;
 
 
@@ -20,6 +21,11 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         Inicializador.cargarDatos();
         VentaService ventaService = new VentaService();
+        
+        if (DataStore.eventos.isEmpty()) {
+            System.out.println("Error: no hay eventos cargados.");
+            return;
+        }
         Evento evento = DataStore.eventos.get(0);
         
         int opcion;
@@ -189,7 +195,8 @@ public class Main {
         int idCliente = cliente.getId();
         DataStore.eliminarCliente(idCliente);
         
-        // Eliminar ventas asociadas al cliente
+        // Paso 1: eliminar referencias de la venta en los eventos
+        // (no modifica DataStore.ventas, por eso se hace dentro del loop)
         for (int i = 0; i < DataStore.ventaCount; i++) {
             Venta v = DataStore.ventas[i];
             if (v != null) {
@@ -208,7 +215,7 @@ public class Main {
             }
         }
         
-        // Limpia y ordena DataStore.ventas
+        // Paso 2: eliminar definitivamente las ventas del cliente del DataStore
         DataStore.eliminarVentasYCompactar(idCliente);
         
         System.out.println("Cliente eliminado correctamente.");
@@ -265,7 +272,7 @@ public class Main {
         do {
             
             Venta venta = ventaService.venderEntrada(clienteSeleccionado, evento);
-            SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm");
+            SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm", new Locale("es", "CL"));
 
             if (venta != null) {
                 System.out.println("\nVenta realizada con exito.");
