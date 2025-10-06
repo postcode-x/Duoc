@@ -2,6 +2,7 @@ package cl.ignacioaraya.teatroentradas.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Venta {
 
@@ -73,7 +74,7 @@ public class Venta {
     // Representación legible de la venta
     @Override
     public String toString() {
-        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm", new Locale("es", "CL"));
         return "Venta ( " +
                 "Id: " + id +
                 ", Cliente: " + cliente.getNombre() +
