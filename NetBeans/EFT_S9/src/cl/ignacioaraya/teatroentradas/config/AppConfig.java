@@ -23,10 +23,15 @@ public class AppConfig {
     public static final int DESCUENTO_MUJER = 7;             // 7%
     public static final int DESCUENTO_ESTUDIANTE = 25;       // 25%
     public static final int DESCUENTO_ADULTO_MAYOR = 30;     // 30%
+    
+    // Rangos de edades para descuentos
+    public static final int EDAD_MAX_NINO = 12;
+    public static final int EDAD_MAX_ESTUDIANTE = 25;
+    public static final int EDAD_MIN_ADULTO_MAYOR = 65;
 
     // Configuracion de asientos
     public static final int FILAS_POR_ZONA = 2;        // Filas por cada zona
-    public static final int ASIENTOS_POR_FILA = 10;     // Asientos por fila
+    public static final int ASIENTOS_POR_FILA = 5;     // Asientos por fila
     public static final int CAPACIDAD = FILAS_POR_ZONA * ASIENTOS_POR_FILA * ZONAS.length; // Capacidad total
 
     

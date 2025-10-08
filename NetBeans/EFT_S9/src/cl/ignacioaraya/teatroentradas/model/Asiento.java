@@ -28,7 +28,12 @@ public class Asiento {
 
     // Muestra el asiento en formato legible para menus
     public String mostrar() {
-        return numero + ") " + zona.nombre() + fila + "-" + columna + " (" + estado.obtenerNombre() + ")";
+        return numero + ") " + zona.nombre() + " " + fila + "-" + columna + " (" + estado.obtenerNombre() + ")";
+    }
+    
+    // Muestra el asiento en formato reducido para vista de layout
+    public String mostrarSimple() {
+        return numero + (numero < 10 ? ".  ": ". ") + fila + "-" + columna + " [" + (getEstado() == AppConfig.Estado.DISPONIBLE ? "D" : "X") + "]" ;
     }
 
     // Muestra el asiento en formato para boleta
