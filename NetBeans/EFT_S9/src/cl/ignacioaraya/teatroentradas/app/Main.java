@@ -50,14 +50,14 @@ public class Main {
     private static void mostrarAsientosTeatroUI(VentaService ventaService){
         System.out.println("\n--- Asientos ---");
         System.out.println("[D] : Disponible");
-        System.out.println("[X] : Vendido\n");
+        System.out.println("[X] : Ocupado\n");
         System.out.print(ventaService.mostrar());
     }
     
     // UI para venta de entradas
     private static void venderEntradaUI(Scanner sc, VentaService ventaService){
         if (ventaService.getAsientosDisponibles() == 0) {
-            System.out.println("\nNo quedan entradas disponibles.");
+            System.out.println("\nNo quedan asientos disponibles.");
             return;
         }
         
@@ -90,7 +90,7 @@ public class Main {
 
         } while (seguirComprando);
         
-        System.out.println("\n--- Confirmar la compra ---");
+        System.out.println("\n--- Resumen de la compra ---");
         System.out.println("Cantidad de asientos elegidos: " + ventaService.getCarrito().size());
         for(Asiento asiento: ventaService.getCarrito()){
            System.out.println(asiento.getNumero() + (asiento.getNumero() < 10 ? "  | ": " | ") + asiento.getZona().nombre() + " | Precio: $" + asiento.getZona().precio() + " | " + asiento.getDescuentoTexto() + " (" + asiento.getDescuento() + "%)");
