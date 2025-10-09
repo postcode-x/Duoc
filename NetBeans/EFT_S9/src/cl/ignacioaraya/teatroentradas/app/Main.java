@@ -90,15 +90,12 @@ public class Main {
 
         } while (seguirComprando);
         
-        System.out.println("\nConfirme la compra de asiento(s):");
+        System.out.println("\n--- Confirmar la compra ---");
+        System.out.println("NCantidad de asientos elegidos: " + ventaService.getCarrito().size());
         for(Asiento asiento: ventaService.getCarrito()){
-           System.out.println(asiento.getNumero() + " | Precio: $" + asiento.getZona().precio() + " | " + asiento.getDescuentoTexto() + " (" + asiento.getDescuento() + "%)");
-        }
-        
-        System.out.println("\n=== COMPRAR ENTRADA(S) ===");
-        System.out.println("Numero de asientos elegidos: " + ventaService.getCarrito().size());
-        System.out.println("Detalle: " + ventaService.mostrarAsientosCarrito());
-        System.out.println("Total a pagar: $" + ventaService.calcularTotalCarrito());
+           System.out.println(asiento.getNumero() + (asiento.getNumero() < 10 ? "  | ": " | ") + asiento.getZona().nombre() + " | Precio: $" + asiento.getZona().precio() + " | " + asiento.getDescuentoTexto() + " (" + asiento.getDescuento() + "%)");
+        }        
+        System.out.println("\nTotal a pagar: $" + ventaService.calcularTotalCarrito());
         
         boolean confirmaCompra = preguntaConfirmarCompra(sc);
         
@@ -116,7 +113,7 @@ public class Main {
     private static boolean preguntaConfirmarCompra(Scanner sc) {
         int opcion;
         do {
-            opcion = InputUtils.leerEntero(sc, "1 = Pagar / 0 = Cancelar: ");
+            opcion = InputUtils.leerEntero(sc, "\n1 = Pagar / 0 = Cancelar: ");
             if (opcion != 0 && opcion != 1) {
                 System.out.println("Opción no válida.");
             }
