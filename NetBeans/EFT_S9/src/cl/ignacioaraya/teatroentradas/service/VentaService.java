@@ -181,6 +181,37 @@ public class VentaService {
         }
         return false;
     }
-
     
+    // Genera un resumen general del estado del teatro
+    public String generarReporteGeneral() {
+        int totalAsientos = asientos.size();
+        int asientosVendidos = 0;
+        double ingresosTotales = 0;
+
+        for (Asiento asiento : asientos) {
+            if (asiento.getEstado() == AppConfig.Estado.VENDIDO) {
+                asientosVendidos++;
+            }
+        }
+
+        for (Boleta boleta : boletas) {
+            ingresosTotales += boleta.getTotal();
+        }
+
+        int asientosDisponibles = totalAsientos - asientosVendidos;
+        int totalBoletas = boletas.size();
+        double promedioPorVenta = totalBoletas > 0 ? ingresosTotales / totalBoletas : 0;
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n--- REPORTE GENERAL ---\n\n");
+        sb.append("Total de asientos: ").append(totalAsientos).append("\n");
+        sb.append("Asientos vendidos: ").append(asientosVendidos).append("\n");
+        sb.append("Asientos disponibles: ").append(asientosDisponibles).append("\n");
+        sb.append("Boletas emitidas: ").append(totalBoletas).append("\n");
+        sb.append("Ingresos totales: $").append(Math.round(ingresosTotales)).append("\n");
+        sb.append("Promedio por venta: $").append(Math.round(promedioPorVenta)).append("\n");
+
+        return sb.toString();
+    }
+
 }

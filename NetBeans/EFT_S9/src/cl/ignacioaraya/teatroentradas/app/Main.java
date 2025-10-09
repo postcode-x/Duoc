@@ -35,7 +35,7 @@ public class Main {
                 case 2 -> venderEntradaUI(sc, ventaService);
                 case 3 -> mostrarVentasUI(sc, ventaService);
                 case 4 -> eliminarVentaUI(sc, ventaService);
-                //case 5 -> mostrarReporte();
+                case 5 -> mostrarReporteGeneralUI(ventaService);
                 case 6 -> System.out.println("\nHasta luego!");
                 default -> System.out.println("Opcion invalida.");
             }
@@ -269,8 +269,13 @@ public class Main {
         if (eliminada) {
             System.out.println("\nVenta eliminada correctamente. Los asientos fueron liberados.");
         } else {
-            System.out.println("\nNumero de boleta no vslido. Intente nuevamente.");
+            System.out.println("\nNumero de boleta no valido. Intente nuevamente.");
         }
+    }
+    
+    // UI para mostrar reporte general
+    private static void mostrarReporteGeneralUI(VentaService ventaService) {
+        System.out.println(ventaService.generarReporteGeneral());
     }
     
     // Obtiene texto descuento actual
