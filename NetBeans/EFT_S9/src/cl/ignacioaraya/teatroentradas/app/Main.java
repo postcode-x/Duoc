@@ -22,7 +22,7 @@ public class Main {
             System.out.println("\n--- Menu de Venta | "
                     + AppConfig.NOMBRE_TEATRO
                     + " (" + ventaService.getAsientosDisponibles() + " asientos disponibles) ---\n");
-            System.out.println("1. Mostrar Asientos Disponibles");
+            System.out.println("1. Mostrar Asientos");
             System.out.println("2. Vender Entradas");
             System.out.println("3. Listar Ventas / Imprimir Boletas");
             System.out.println("4. Eliminar Venta");
