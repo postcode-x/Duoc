@@ -26,20 +26,20 @@ public class AppConfig {
     public static final int DESCUENTO_ADULTO_MAYOR = 30; // 30%
 
     // Rangos de edades para descuentos
-    public static final int EDAD_MAX_NINO = 12;
-    public static final int EDAD_MAX_ESTUDIANTE = 25;
-    public static final int EDAD_MIN_ADULTO_MAYOR = 65;
+    public static final int EDAD_MAX_NINO = 12; // Edad máxima para descuento niño
+    public static final int EDAD_MAX_ESTUDIANTE = 25; // Edad máxima para descuento estudiante
+    public static final int EDAD_MIN_ADULTO_MAYOR = 65; // Edad mínima para adulto mayor
 
     // Configuracion de asientos
     public static final int FILAS_POR_ZONA = 2; // Filas por cada zona
     public static final int ASIENTOS_POR_FILA = 5; // Asientos por fila
-    public static final int CAPACIDAD = FILAS_POR_ZONA * ASIENTOS_POR_FILA * ZONAS.length; // Capacidad total
+    public static final int CAPACIDAD = FILAS_POR_ZONA * ASIENTOS_POR_FILA * ZONAS.length; // Capacidad total del teatro
 
     // Estados posibles de un asiento
     public enum Estado {
-        DISPONIBLE("Disponible"),
-        SELECCIONADO("Seleccionado"),
-        VENDIDO("Vendido");
+        DISPONIBLE("Disponible"),   // Asiento libre y disponible para selección
+        SELECCIONADO("Seleccionado"), // Asiento temporalmente seleccionado en el carrito
+        VENDIDO("Vendido");         // Asiento ya comprado
 
         private final String nombre;
 

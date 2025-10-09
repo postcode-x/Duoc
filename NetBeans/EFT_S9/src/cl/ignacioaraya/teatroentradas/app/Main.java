@@ -55,7 +55,7 @@ public class Main {
 
     }
 
-    // UI para mostrar layout con asientos del teatro
+    // Muestra el estado actual de los asientos (D, S o X)
     private static void mostrarAsientosTeatroUI(VentaService ventaService) {
         System.out.println("\n--- Asientos ---\n");
         System.out.println("[D] : Disponible");
@@ -64,30 +64,34 @@ public class Main {
         System.out.print(ventaService.mostrar());
     }
 
-    // UI para venta de entradas
+    // Gestiona el proceso de venta de entradas al usuario
     private static void venderEntradaUI(Scanner sc, VentaService ventaService) {
         if (ventaService.getAsientosDisponibles() == 0) {
             System.out.println("\nNo quedan asientos disponibles.");
             return;
         }
 
+        // Limpia el carrito antes de iniciar una nueva compra
         ventaService.getCarrito().clear();
 
+        // Solicita datos del cliente
         int edad = preguntarEdadCliente(sc);
         boolean esMujer = preguntarGeneroMujer(sc);
 
+        // Calcula descuentos aplicables
         int descuentoPorEdad = ventaService.calculaDescuentoPorEdad(edad);
         int descuentoPorGenero = ventaService.calculaDescuentoPorGenero(esMujer);
 
-        // La lógica del negocio considera solamente el descuento más alto
+        // Solo se aplica el descuento mayor entre los dos
         int descuentoFinal = Math.max(descuentoPorEdad, descuentoPorGenero);
 
         boolean seguirComprando;
 
         do {
-            // Seleccionar ubicacion
+            // Selecciona un asiento disponible
             int numeroAsiento = seleccionarAsiento(sc, ventaService);
 
+            // Marca el asiento como seleccionado y lo agrega al carrito
             for (Asiento asiento : ventaService.getAsientos()) {
                 if (asiento.getNumero() == numeroAsiento) {
                     asiento.setSeleccionado();
@@ -100,6 +104,7 @@ public class Main {
 
         } while (seguirComprando);
 
+        // Muestra el resumen de compra antes de confirmar
         System.out.println("\n--- Resumen de la compra ---\n");
         System.out.println("Cantidad de asientos elegidos: " + ventaService.getCarrito().size());
         for (Asiento asiento : ventaService.getCarrito()) {
@@ -109,6 +114,7 @@ public class Main {
         System.out.println("Descuento: " + descuentoFinal + "% (" + getDescuentoTexto(descuentoFinal) + ")");
         System.out.println("Total a pagar: $" + Math.round(ventaService.calcularTotalCarritoConDescuento(descuentoFinal)));
 
+        // Confirmar o cancelar compra
         boolean confirmaCompra = preguntaConfirmarCompra(sc);
 
         if (confirmaCompra) {
@@ -121,7 +127,7 @@ public class Main {
 
     }
 
-    // Pregunta al usuario si desea comprar
+    // Pregunta al usuario si confirma la compra
     private static boolean preguntaConfirmarCompra(Scanner sc) {
         int opcion;
         do {
@@ -134,7 +140,7 @@ public class Main {
         return opcion == 1;
     }
 
-    // Pregunta al usuario si desea seguir comprando
+    // Pregunta si el usuario desea seguir comprando más asientos
     private static boolean preguntaSeguirComprando(Scanner sc) {
         int opcionSeguir;
         do {
@@ -147,7 +153,7 @@ public class Main {
         return opcionSeguir == 1;
     }
 
-    // UI para seleccionar ubicacion del asiento
+    // Permite al usuario seleccionar un asiento disponible
     private static int seleccionarAsiento(Scanner sc, VentaService ventaService) {
         boolean asientoSeleccionado = false;
         int numeroAsiento = -1;
@@ -177,7 +183,7 @@ public class Main {
         return numeroAsiento;
     }
 
-    // UI para preguntar por edad y validar
+    // Solicita y valida la edad del cliente
     private static int preguntarEdadCliente(Scanner sc) {
         boolean edadIngresada = false;
         int edad = -1;
@@ -196,7 +202,7 @@ public class Main {
         return edad;
     }
 
-    // UI para preguntar al usuario por su género
+    // Pregunta al usuario si es de genero femenino
     private static boolean preguntarGeneroMujer(Scanner sc) {
         int opcion;
         do {
@@ -209,7 +215,7 @@ public class Main {
         return opcion == 1;
     }
 
-    // UI para listar ventas / imprimir boleta
+    // Lista todas las ventas realizadas y permite ver detalle de cada boleta
     private static void mostrarVentasUI(Scanner sc, VentaService ventaService) {
         if (ventaService.getBoletas().isEmpty()) {
             System.out.println("\nNo existen entradas vendidas.");
@@ -218,13 +224,10 @@ public class Main {
 
         int opcion;
 
-        // Menu principal
+        // Menu de boletas
         do {
 
             System.out.println("\n--- RESUMEN DE VENTAS ---\n");
-            //for (Boleta boleta : ventaService.getBoletas()) {
-            //    System.out.println("Boleta # " + boleta.getNumero() + " | Total: $" +  Math.round(boleta.getTotal()));
-            //}
 
             List< Boleta> boletas = ventaService.getBoletas();
 
@@ -258,7 +261,7 @@ public class Main {
 
     }
 
-    // UI para eliminar venta
+    // Permite eliminar una venta y liberar sus asientos
     private static void eliminarVentaUI(Scanner sc, VentaService ventaService) {
         if (ventaService.getBoletas().isEmpty()) {
             System.out.println("\nNo existen ventas registradas.");
@@ -286,12 +289,12 @@ public class Main {
         }
     }
 
-    // UI para mostrar reporte general
+    // Muestra el reporte general del teatro (estadísticas básicas)
     private static void mostrarReporteGeneralUI(VentaService ventaService) {
         System.out.println(ventaService.generarReporteGeneral());
     }
 
-    // Obtiene texto descuento actual
+    // Devuelve texto descriptivo del tipo de descuento aplicado
     private static String getDescuentoTexto(int descuento) {
         return descuento == AppConfig.DESCUENTO_NINOS
                 ? "Descuento Niños"

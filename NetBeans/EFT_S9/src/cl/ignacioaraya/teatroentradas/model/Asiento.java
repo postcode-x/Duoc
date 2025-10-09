@@ -14,10 +14,10 @@ public class Asiento {
     private final int fila;
     private final int columna;
 
-    // Estado actual del asiento (disponible, vendido)
+    // Estado actual del asiento (disponible, seleccionado, vendido)
     private AppConfig.Estado estado;
 
-    // Constructor
+    // Constructor inicializa asiento con estado disponible por defecto
     public Asiento(int numero, AppConfig.Zona zona, int fila, int columna) {
         this.numero = numero;
         this.zona = zona;
@@ -31,12 +31,12 @@ public class Asiento {
         return numero + ") " + zona.nombre() + " " + fila + "-" + columna;
     }
 
-    // Muestra el asiento en formato reducido para vista de layout
+    // Muestra el asiento en formato reducido para vista de layout (D=disponible, S=seleccionado, X=vendido)
     public String mostrarSimple() {
         return numero + (numero < 10 ? ".  " : ". ") + fila + "-" + columna + " [" + (getEstado() == AppConfig.Estado.DISPONIBLE ? "D" : getEstado() == AppConfig.Estado.SELECCIONADO ? "S" : "X") + "]";
     }
 
-    // Muestra el asiento en formato para boleta
+    // Muestra el asiento en formato para boleta (detalle de compra)
     public String mostrarItemAsientoBoleta() {
         return "Asiento # " + numero
                 + " | Ubicacion: " + zona.nombre() + fila + "-" + columna

@@ -8,10 +8,10 @@ import java.util.List;
 
 public class VentaService {
 
-    // Contador para asientos
+    // Contador para asignar numero unico a cada asiento
     private static int contadorAsientos = 0;
 
-    // Contados para boletas
+    // Contador para asignar numero unico a cada boleta
     private static int contadorBoletas = 0;
 
     // Lista de todos los asientos del teatro
@@ -20,9 +20,10 @@ public class VentaService {
     // Lista de boletas emitidas
     private final List<Boleta> boletas = new ArrayList<>();
 
-    // Lista de asientos que el usuario tiene en el carrito
+    // Lista de asientos seleccionados temporalmente por el usuario
     private final List<Asiento> carrito = new ArrayList<>();
 
+    // Inicializa todos los asientos del teatro según las zonas, filas y columnas
     public VentaService() {
         for (AppConfig.Zona zona : AppConfig.ZONAS) {
             for (int fila = 1; fila <= AppConfig.FILAS_POR_ZONA; fila++) {
@@ -34,7 +35,7 @@ public class VentaService {
         }
     }
 
-    // Muestra el layout del teatro con los asientos por zona
+    // Muestra el layout del teatro con asientos disponibles, seleccionados y vendidos
     public String mostrar() {
         StringBuilder layoutTeatro = new StringBuilder();
 
@@ -58,6 +59,7 @@ public class VentaService {
         return layoutTeatro.toString();
     }
 
+    // Calcula descuento segun edad
     public int calculaDescuentoPorEdad(int edad) {
         if (edad <= AppConfig.EDAD_MAX_NINO) {
             return AppConfig.DESCUENTO_NINOS;
@@ -71,11 +73,12 @@ public class VentaService {
         return 0;
     }
 
+    // Calcula descuento por genero
     public int calculaDescuentoPorGenero(boolean esMujer) {
         return esMujer ? AppConfig.DESCUENTO_MUJER : 0;
     }
 
-    // Retorna cantidad de asientos disponibles
+    // Retorna cantidad de asientos actualmente disponibles
     public int getAsientosDisponibles() {
         int contador = 0;
         for (Asiento asiento : asientos) {
@@ -86,7 +89,7 @@ public class VentaService {
         return contador;
     }
 
-    // Marca los asientos del carrito como vendidos y crea boleta
+    // Marca los asientos del carrito como vendidos y genera una boleta
     public int marcarComoVendidos(int descuento) {
         for (Asiento asiento : carrito) {
             asiento.setVendido();
@@ -97,7 +100,7 @@ public class VentaService {
         return contadorBoletas;
     }
 
-    // Marca los asientos del carrito como disponibles si no se compro
+    // Marca los asientos del carrito como disponibles si se cancela compra
     public void marcarComoDisponibles() {
         for (Asiento asiento : carrito) {
             if (asiento.getEstado() == AppConfig.Estado.SELECCIONADO) {
@@ -107,7 +110,7 @@ public class VentaService {
         carrito.clear();
     }
 
-    // Calcula total de los asientos en el carrito
+    // Calcula total de los asientos en el carrito sin descuento
     public double calcularTotalCarrito() {
         double totalCheckout = 0;
         for (Asiento asiento : carrito) {
@@ -116,7 +119,7 @@ public class VentaService {
         return totalCheckout;
     }
 
-    // Calcula total de los asientos en el carrito con descuento
+    // Calcula total de los asientos en el carrito aplicando descuento
     public double calcularTotalCarritoConDescuento(int descuentoFinal) {
         double totalCheckout = 0;
         for (Asiento asiento : carrito) {
@@ -125,7 +128,7 @@ public class VentaService {
         return totalCheckout;
     }
 
-    // Muestra los asientos en el carrito
+    // Muestra los asientos que están actualmente en el carrito
     public String mostrarAsientosCarrito() {
         if (carrito.isEmpty()) {
             return "";
@@ -167,7 +170,7 @@ public class VentaService {
         return contador;
     }
 
-    // Elimina una boleta existente por número
+    // Elimina una boleta y libera los asientos correspondientes
     public boolean eliminarVenta(int numeroBoleta) {
         for (int i = 0; i < boletas.size(); i++) {
             Boleta boleta = boletas.get(i);
@@ -184,7 +187,7 @@ public class VentaService {
         return false;
     }
 
-    // Genera un resumen general del estado del teatro
+    // Genera un reporte general con resumen de asientos y ventas
     public String generarReporteGeneral() {
         int totalAsientos = asientos.size();
         int asientosVendidos = 0;
