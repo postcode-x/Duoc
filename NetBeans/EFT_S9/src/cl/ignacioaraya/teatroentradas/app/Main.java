@@ -209,7 +209,7 @@ public class Main {
     
     // UI para listar ventas / imprimir boleta
     private static void mostrarVentasUI(Scanner sc, VentaService ventaService) {
-        if (ventaService.getNumeroBoletas() == 0) {
+        if (ventaService.getBoletas().isEmpty()) {
             System.out.println("\nNo existen entradas vendidas.");
             return;
         }
