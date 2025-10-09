@@ -109,7 +109,7 @@ public class Main {
             asiento.setSeleccionado();
             ventaService.getCarrito().add(asiento);
             
-            seguirComprando = preguntaSeguirComprando(sc);
+            seguirComprando = ventaService.getAsientosDisponibles() > 0 && preguntaSeguirComprando(sc);
 
         } while (seguirComprando);
 
