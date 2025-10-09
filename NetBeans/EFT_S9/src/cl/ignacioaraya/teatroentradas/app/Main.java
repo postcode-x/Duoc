@@ -297,7 +297,7 @@ public class Main {
     // Devuelve texto descriptivo del tipo de descuento aplicado
     private static String getDescuentoTexto(int descuento) {
         return descuento == AppConfig.DESCUENTO_NINOS
-                ? "Descuento Niños"
+                ? "Descuento Ninos"
                 : descuento == AppConfig.DESCUENTO_ESTUDIANTE
                         ? "Descuento Estudiante"
                         : descuento == AppConfig.DESCUENTO_ADULTO_MAYOR
