@@ -87,12 +87,12 @@ public class VentaService {
     }
     
     // Marca los asientos del carrito como vendidos y crea boleta
-    public int marcarComoVendidos() {
+    public int marcarComoVendidos(int descuento) {
         for (Asiento asiento : carrito) {
             asiento.setVendido();
         }
         contadorBoletas++;
-        boletas.add(new Boleta(contadorBoletas, new ArrayList<>(carrito)));
+        boletas.add(new Boleta(contadorBoletas, new ArrayList<>(carrito), calcularTotalCarrito(), descuento));
         carrito.clear();
         return contadorBoletas;
     }
@@ -100,7 +100,7 @@ public class VentaService {
     // Marca los asientos del carrito como disponibles si no se compro
     public void marcarComoDisponibles() {
         for (Asiento asiento : carrito) {
-            if (asiento.getEstado() == AppConfig.Estado.PENDIENTE) {
+            if (asiento.getEstado() == AppConfig.Estado.SELECCIONADO) {
                 asiento.setDisponible();
             }
         }
@@ -111,7 +111,16 @@ public class VentaService {
     public double calcularTotalCarrito() {
         double totalCheckout = 0;
         for (Asiento asiento : carrito) {
-            totalCheckout += asiento.getPrecio() * (1 - asiento.getDescuento() / 100.0);
+            totalCheckout += asiento.getPrecio();
+        }
+        return totalCheckout;
+    }
+    
+    // Calcula total de los asientos en el carrito con descuento
+    public double calcularTotalCarritoConDescuento(int descuentoFinal) {
+        double totalCheckout = 0;
+        for (Asiento asiento : carrito) {
+            totalCheckout += asiento.getPrecio() * (1 - descuentoFinal / 100.0);
         }
         return totalCheckout;
     }
@@ -134,8 +143,26 @@ public class VentaService {
         return asientos;
     }
     
+    public List<Boleta> getBoletas() {
+        return boletas;
+    }
+    
     public List<Asiento> getCarrito() {
         return carrito;
+    }
+    
+    public int getNumeroBoletas() {
+        return boletas.size();
+    }
+    
+    public int getAsientosVendidos() {
+        int contador = 0;
+        for (Asiento asiento : asientos) {
+            if (asiento.getEstado() == AppConfig.Estado.VENDIDO) {
+                contador++;
+            }
+        }
+        return contador;
     }
     
 }

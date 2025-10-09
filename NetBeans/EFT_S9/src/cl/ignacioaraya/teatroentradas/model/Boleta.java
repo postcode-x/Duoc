@@ -8,27 +8,42 @@ public class Boleta {
     private final int numero;
 
     // Lista de asientos asociados a esta boleta
-    private final List<Asiento> asientos;
+    private final List<Asiento> asientos;    
+    
+    // Precio sin descuento
+    private final double precio;
+    
+    // Descuento
+    private final int descuento;
 
     // Constructor
-    public Boleta(int numero, List<Asiento> asientos) {
+    public Boleta(int numero, List<Asiento> asientos, double precio, int descuento) {
         this.numero = numero;
         this.asientos = asientos;
+        this.precio = precio;
+        this.descuento = descuento;
     }
 
-    // Calcula el total de la boleta sumando el precio de todos los asientos con
-    // sus descuentos correspondientes.
+    // Calcula el total de la boleta aplicando el descuento correspondiente.
     public double getTotal() {
-        double total = 0;
-        for (Asiento asiento : asientos) {
-            total += asiento.getPrecio() * (1 - asiento.getDescuento() / 100);
-        }
-        return total;
+        return precio * (1 - descuento / 100.0);
     }
+    
+    // Getters
 
     // Obtiene el numero de la boleta
-    public int getNumeroBoleta() {
+    public int getNumero() {
         return numero;
+    }
+    
+    // Obtiene el precio sin descuento
+    public double getPrecio() {
+        return precio;
+    }
+    
+    // Obtiene el descuento de la boleta
+    public int getDescuento() {
+        return descuento;
     }
 
     // Obtiene la lista de asientos de la boleta

@@ -2,6 +2,7 @@ package cl.ignacioaraya.teatroentradas.app;
 
 import cl.ignacioaraya.teatroentradas.config.AppConfig;
 import cl.ignacioaraya.teatroentradas.model.Asiento;
+import cl.ignacioaraya.teatroentradas.model.Boleta;
 import cl.ignacioaraya.teatroentradas.service.VentaService;
 import cl.ignacioaraya.teatroentradas.util.InputUtils;
 import java.util.Scanner;
@@ -32,7 +33,7 @@ public class Main {
             switch (opcion) {
                 case 1 -> mostrarAsientosTeatroUI(ventaService);
                 case 2 -> venderEntradaUI(sc, ventaService);
-                //case 3 -> listarEntradasUI();
+                case 3 -> listarEntradasUI(sc, ventaService);
                 //case 4 -> eliminarVenta();
                 //case 5 -> mostrarReporte();
                 case 6 -> System.out.println("\nHasta luego!");
@@ -48,8 +49,9 @@ public class Main {
     
     // UI para mostrar layout con asientos del teatro
     private static void mostrarAsientosTeatroUI(VentaService ventaService){
-        System.out.println("\n--- Asientos ---");
+        System.out.println("\n--- Asientos ---\n");
         System.out.println("[D] : Disponible");
+        System.out.println("[S] : Seleccionado");
         System.out.println("[X] : Ocupado\n");
         System.out.print(ventaService.mostrar());
     }
@@ -69,6 +71,7 @@ public class Main {
         int descuentoPorEdad = ventaService.calculaDescuentoPorEdad(edad);
         int descuentoPorGenero = ventaService.calculaDescuentoPorGenero(esMujer);
 
+        // La lógica del negocio considera solamente el descuento más alto
         int descuentoFinal = Math.max(descuentoPorEdad, descuentoPorGenero);
         
         boolean seguirComprando;
@@ -79,8 +82,7 @@ public class Main {
             
             for (Asiento asiento : ventaService.getAsientos()) {
                 if (asiento.getNumero() == numeroAsiento) {
-                    asiento.setDescuento(descuentoFinal);
-                    asiento.setPendiente();
+                    asiento.setSeleccionado();
                     ventaService.getCarrito().add(asiento);
                     break;
                 }
@@ -90,17 +92,19 @@ public class Main {
 
         } while (seguirComprando);
         
-        System.out.println("\n--- Resumen de la compra ---");
+        System.out.println("\n--- Resumen de la compra ---\n");
         System.out.println("Cantidad de asientos elegidos: " + ventaService.getCarrito().size());
         for(Asiento asiento: ventaService.getCarrito()){
-           System.out.println(asiento.getNumero() + (asiento.getNumero() < 10 ? "  | ": " | ") + asiento.getZona().nombre() + " | Precio: $" + asiento.getZona().precio() + " | " + asiento.getDescuentoTexto() + " (" + asiento.getDescuento() + "%)");
-        }        
-        System.out.println("\nTotal a pagar: $" + ventaService.calcularTotalCarrito());
+           System.out.println(asiento.getNumero() + (asiento.getNumero() < 10 ? ".  | ": ". | ") + asiento.getFila() + "-" + asiento.getColumna() + " " + asiento.getZona().nombre() + " | Precio: $" + Math.round(asiento.getZona().precio()));
+        }    
+        System.out.println("\nPrecio: $" + Math.round(ventaService.calcularTotalCarrito()));
+        System.out.println("Descuento: " + descuentoFinal + "% (" + getDescuentoTexto(descuentoFinal) + ")");
+        System.out.println("Total a pagar: $" + Math.round(ventaService.calcularTotalCarritoConDescuento(descuentoFinal)));
         
         boolean confirmaCompra = preguntaConfirmarCompra(sc);
         
         if(confirmaCompra){
-            int numBoleta = ventaService.marcarComoVendidos();
+            int numBoleta = ventaService.marcarComoVendidos(descuentoFinal);
             System.out.println("\nCompra realizada con exito (Boleta # " + numBoleta + "). Gracias!");
         }else{
             ventaService.marcarComoDisponibles();
@@ -142,7 +146,7 @@ public class Main {
         
         while (!asientoSeleccionado) {
         
-            System.out.println("\n=== SELECCIONAR ASIENTO ===");
+            System.out.println("\n--- SELECCIONAR ASIENTO ---\n");
             System.out.print(ventaService.mostrar());
 
             int opcion = InputUtils.leerEntero(sc, "\nSeleccione # de asiento: ");
@@ -189,7 +193,7 @@ public class Main {
         String respuesta;
 
         while (true) {
-            System.out.print("\nEs usted de genero femenino? Ingrese 's' para si o 'n' para no: ");
+            System.out.print("\nEs usted de genero femenino (S/N)? : ");
             respuesta = sc.next().trim().toLowerCase();
 
             if (respuesta.length() == 1 && (respuesta.equals("s") || respuesta.equals("n"))) {
@@ -201,6 +205,56 @@ public class Main {
 
         sc.nextLine();
         return respuesta.equals("s");
+    }
+    
+    // UI para listar ventas / imprimir boleta
+    private static void listarEntradasUI(Scanner sc, VentaService ventaService) {
+        if (ventaService.getNumeroBoletas() == 0) {
+            System.out.println("\nNo existen entradas vendidas.");
+            return;
+        }
+        
+        int opcion;
+
+        // Menu principal
+        do {
+        
+            System.out.println("\n--- RESUMEN DE VENTAS ---\n");
+            for (Boleta boleta : ventaService.getBoletas()) {
+                System.out.println("Boleta # " + boleta.getNumero() + " | Total con descuentos: $" +  Math.round(boleta.getTotal()));
+            }
+            
+            opcion = InputUtils.leerEntero(sc, "\nEscriba numero de boleta para ver detalle (0 para salir): ");
+            
+            if (opcion == 0) break;
+            
+            if (opcion < 1 || opcion > ventaService.getBoletas().size()) {
+                System.out.println("Numero de boleta no valido.");
+            }else{
+                Boleta boleta = ventaService.getBoletas().get(opcion -1);
+                System.out.println("\nBoleta # " + boleta.getNumero() + " | Cantidad Asientos " + boleta.getAsientos().size());
+                for(Asiento asiento: boleta.getAsientos()){
+                    System.out.println(asiento.getNumero() + (asiento.getNumero() < 10 ? ".  | ": ". | ") + asiento.getFila() + "-" + asiento.getColumna() + " " + asiento.getZona().nombre() + " | Precio: $" + Math.round(asiento.getZona().precio()));
+                }
+                System.out.println("\nPrecio: $" + Math.round(boleta.getPrecio()));
+                System.out.println("Descuento: " + boleta.getDescuento() + "% (" + getDescuentoTexto(boleta.getDescuento()) + ")");
+                System.out.println("Total: $" + Math.round(boleta.getTotal()));
+            }
+            
+        } while (opcion != 0); 
+        
+    }
+    
+    // Obtiene texto descuento actual
+    private static String getDescuentoTexto(int descuento){
+        return descuento == AppConfig.DESCUENTO_NINOS 
+                ? "Descuento Niños" 
+                : descuento == AppConfig.DESCUENTO_ESTUDIANTE 
+                    ? "Descuento Estudiante" :
+                    descuento == AppConfig.DESCUENTO_ADULTO_MAYOR 
+                        ? "Descuento Adulto Mayor" :
+                            descuento == AppConfig.DESCUENTO_MUJER 
+                            ? "Descuento Mujer" : "Sin descuento";
     }
     
 }
