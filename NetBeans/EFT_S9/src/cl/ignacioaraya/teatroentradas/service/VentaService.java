@@ -2,6 +2,7 @@ package cl.ignacioaraya.teatroentradas.service;
 
 import cl.ignacioaraya.teatroentradas.config.AppConfig;
 import cl.ignacioaraya.teatroentradas.model.Asiento;
+import cl.ignacioaraya.teatroentradas.model.Boleta;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,11 +11,14 @@ public class VentaService {
     // Contador para asientos
     private static int contadorAsientos = 0;
     
+    // Contados para boletas
+    private static int contadorBoletas = 0;
+    
     // Lista de todos los asientos del teatro
     private final List<Asiento> asientos = new ArrayList<>();
 
     // Lista de boletas emitidas
-    //private final List<Boleta> boletas = new ArrayList<>();
+    private final List<Boleta> boletas = new ArrayList<>();
 
     // Lista de asientos que el usuario tiene en el carrito
     private final List<Asiento> carrito = new ArrayList<>();
@@ -54,6 +58,23 @@ public class VentaService {
         return layoutTeatro.toString();
     }
     
+    public int calculaDescuentoPorEdad(int edad){
+        if (edad <= AppConfig.EDAD_MAX_NINO){
+            return AppConfig.DESCUENTO_NINOS;
+        }
+        if (AppConfig.EDAD_MAX_NINO < edad && edad <= AppConfig.EDAD_MAX_ESTUDIANTE) {
+            return AppConfig.DESCUENTO_ESTUDIANTE;
+        }
+        if (edad >= AppConfig.EDAD_MIN_ADULTO_MAYOR) {
+            return AppConfig.DESCUENTO_ADULTO_MAYOR;
+        }
+        return 0;
+    }
+    
+    public int calculaDescuentoPorGenero(boolean esMujer){
+        return esMujer ? AppConfig.DESCUENTO_MUJER : 0;
+    }
+    
     // Retorna cantidad de asientos disponibles
     public int getAsientosDisponibles(){
         int contador = 0;
@@ -63,6 +84,58 @@ public class VentaService {
             }
         }
         return contador;
+    }
+    
+    // Marca los asientos del carrito como vendidos y crea boleta
+    public int marcarComoVendidos() {
+        for (Asiento asiento : carrito) {
+            asiento.setVendido();
+        }
+        contadorBoletas++;
+        boletas.add(new Boleta(contadorBoletas, new ArrayList<>(carrito)));
+        carrito.clear();
+        return contadorBoletas;
+    }
+    
+    // Marca los asientos del carrito como disponibles si no se compro
+    public void marcarComoDisponibles() {
+        for (Asiento asiento : carrito) {
+            if (asiento.getEstado() == AppConfig.Estado.PENDIENTE) {
+                asiento.setDisponible();
+            }
+        }
+        carrito.clear();
+    }
+    
+    // Calcula total de los asientos en el carrito
+    public double calcularTotalCarrito() {
+        double totalCheckout = 0;
+        for (Asiento asiento : carrito) {
+            totalCheckout += asiento.getPrecio() * (1 - asiento.getDescuento() / 100.0);
+        }
+        return totalCheckout;
+    }
+    
+    // Muestra los asientos en el carrito
+    public String mostrarAsientosCarrito() {
+        if (carrito.isEmpty()) return "";
+
+        StringBuilder sb = new StringBuilder();
+        for (Asiento asiento : carrito) {
+            sb.append(asiento.mostrar()).append(" | ");
+        }
+        sb.setLength(sb.length() - 3); // eliminar ultimo " | "
+
+        return sb.toString();
+    }
+    
+    // Getters
+    public List<Asiento> getAsientos() {
+        return asientos;
+    }
+    
+    public List<Asiento> getCarrito() {
+        return carrito;
     }
     
 }

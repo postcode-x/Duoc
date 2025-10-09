@@ -16,6 +16,9 @@ public class Asiento {
 
     // Estado actual del asiento (disponible, vendido)
     private AppConfig.Estado estado;
+    
+    // Descuento actual del asiento
+    private int descuento;
 
     // Constructor
     public Asiento(int numero, AppConfig.Zona zona, int fila, int columna) {
@@ -24,11 +27,12 @@ public class Asiento {
         this.fila = fila;
         this.columna = columna;
         this.estado = AppConfig.Estado.DISPONIBLE; // por defecto disponible
+        this.descuento = 0; // por defecto 0%
     }
 
     // Muestra el asiento en formato legible para menus
     public String mostrar() {
-        return numero + ") " + zona.nombre() + " " + fila + "-" + columna + " (" + estado.obtenerNombre() + ")";
+        return numero + ") " + zona.nombre() + " " + fila + "-" + columna;
     }
     
     // Muestra el asiento en formato reducido para vista de layout
@@ -47,23 +51,50 @@ public class Asiento {
     public void setDisponible() {
         estado = AppConfig.Estado.DISPONIBLE;
     }
+    
+    // Cambia estado a pendiente
+    public void setPendiente() {
+        estado = AppConfig.Estado.PENDIENTE;
+    }
 
     // Cambia estado a vendido
     public void setVendido() {
         estado = AppConfig.Estado.VENDIDO;
+    }
+    
+    // Setea el descuento
+    public void setDescuento(int descuento) {
+        this.descuento = descuento;
     }
 
     // Obtiene estado actual
     public AppConfig.Estado getEstado() {
         return estado;
     }
-
+    
+    // Obtiene descuento actual
+    public int getDescuento(){
+        return descuento;
+    }
+    
+    // Obtiene texto descuento actual
+    public String getDescuentoTexto(){
+        return descuento == AppConfig.DESCUENTO_NINOS 
+                ? "Descuento Niños" 
+                : descuento == AppConfig.DESCUENTO_ESTUDIANTE 
+                    ? "Descuento Estudiante" :
+                    descuento == AppConfig.DESCUENTO_ADULTO_MAYOR 
+                        ? "Descuento Adulto Mayor" :
+                            descuento == AppConfig.DESCUENTO_MUJER 
+                            ? "Descuento Mujer" : "Sin descuento";
+    }
+    
     // Obtiene numero de asiento
     public int getNumero() {
         return numero;
     }
 
-    // Obtiene precio segun zona
+    // Obtiene precio base segun zona
     public double getPrecio() {
         return zona.precio();
     }

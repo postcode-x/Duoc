@@ -38,6 +38,7 @@ public class AppConfig {
     // Estados posibles de un asiento
     public enum Estado {
         DISPONIBLE("Disponible"),
+        PENDIENTE("Pendiente"),
         VENDIDO("Vendido");
 
         private final String nombre;
