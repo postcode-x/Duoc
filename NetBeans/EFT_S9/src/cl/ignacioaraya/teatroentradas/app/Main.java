@@ -91,7 +91,7 @@ public class Main {
         } while (seguirComprando);
         
         System.out.println("\n--- Confirmar la compra ---");
-        System.out.println("NCantidad de asientos elegidos: " + ventaService.getCarrito().size());
+        System.out.println("Cantidad de asientos elegidos: " + ventaService.getCarrito().size());
         for(Asiento asiento: ventaService.getCarrito()){
            System.out.println(asiento.getNumero() + (asiento.getNumero() < 10 ? "  | ": " | ") + asiento.getZona().nombre() + " | Precio: $" + asiento.getZona().precio() + " | " + asiento.getDescuentoTexto() + " (" + asiento.getDescuento() + "%)");
         }        
