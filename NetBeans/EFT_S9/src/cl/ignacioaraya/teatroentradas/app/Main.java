@@ -34,7 +34,7 @@ public class Main {
                 case 1 -> mostrarAsientosTeatroUI(ventaService);
                 case 2 -> venderEntradaUI(sc, ventaService);
                 case 3 -> mostrarVentasUI(sc, ventaService);
-                //case 4 -> eliminarVenta();
+                case 4 -> eliminarVentaUI(sc, ventaService);
                 //case 5 -> mostrarReporte();
                 case 6 -> System.out.println("\nHasta luego!");
                 default -> System.out.println("Opcion invalida.");
@@ -221,7 +221,7 @@ public class Main {
         
             System.out.println("\n--- RESUMEN DE VENTAS ---\n");
             for (Boleta boleta : ventaService.getBoletas()) {
-                System.out.println("Boleta # " + boleta.getNumero() + " | Total con descuentos: $" +  Math.round(boleta.getTotal()));
+                System.out.println("Boleta # " + boleta.getNumero() + " | Total: $" +  Math.round(boleta.getTotal()));
             }
             
             opcion = InputUtils.leerEntero(sc, "\nEscriba numero de boleta para ver detalle (0 para salir): ");
@@ -232,7 +232,7 @@ public class Main {
                 System.out.println("Numero de boleta no valido.");
             }else{
                 Boleta boleta = ventaService.getBoletas().get(opcion -1);
-                System.out.println("\nBoleta # " + boleta.getNumero() + " | Cantidad Asientos " + boleta.getAsientos().size());
+                System.out.println("\nBoleta # " + boleta.getNumero() + " | Cantidad de Asientos: " + boleta.getAsientos().size());
                 for(Asiento asiento: boleta.getAsientos()){
                     System.out.println(asiento.getNumero() + (asiento.getNumero() < 10 ? ".  | ": ". | ") + asiento.getFila() + "-" + asiento.getColumna() + " " + asiento.getZona().nombre() + " | Precio: $" + Math.round(asiento.getZona().precio()));
                 }
@@ -243,6 +243,34 @@ public class Main {
             
         } while (opcion != 0); 
         
+    }
+    
+    // UI para eliminar venta
+    private static void eliminarVentaUI(Scanner sc, VentaService ventaService) {
+        if (ventaService.getBoletas().isEmpty()) {
+            System.out.println("\nNo existen ventas registradas.");
+            return;
+        }
+
+        System.out.println("\n--- ELIMINAR VENTA ---\n");
+        for (Boleta boleta : ventaService.getBoletas()) {
+            System.out.println("Boleta # " + boleta.getNumero() + " | Total: $" + Math.round(boleta.getTotal()));
+        }
+
+        int numero = InputUtils.leerEntero(sc, "\nIngrese numero de boleta a eliminar (0 para cancelar): ");
+
+        if (numero == 0) {
+            System.out.println("\nOperacion cancelada.");
+            return;
+        }
+
+        boolean eliminada = ventaService.eliminarVenta(numero);
+
+        if (eliminada) {
+            System.out.println("\nVenta eliminada correctamente. Los asientos fueron liberados.");
+        } else {
+            System.out.println("\nNumero de boleta no vslido. Intente nuevamente.");
+        }
     }
     
     // Obtiene texto descuento actual

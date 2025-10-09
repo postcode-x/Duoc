@@ -165,4 +165,22 @@ public class VentaService {
         return contador;
     }
     
+    // Elimina una boleta existente por número
+    public boolean eliminarVenta(int numeroBoleta) {
+        for (int i = 0; i < boletas.size(); i++) {
+            Boleta boleta = boletas.get(i);
+            if (boleta.getNumero() == numeroBoleta) {
+                // Liberar los asientos vendidos
+                for (Asiento asiento : boleta.getAsientos()) {
+                    asiento.setDisponible();
+                }
+                // Eliminar la boleta del registro
+                boletas.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    
 }
