@@ -8,11 +8,11 @@ public class Boleta {
     private final int numero;
 
     // Lista de asientos asociados a esta boleta
-    private final List<Asiento> asientos;    
-    
+    private final List<Asiento> asientos;
+
     // Precio sin descuento
     private final double precio;
-    
+
     // Descuento
     private final int descuento;
 
@@ -28,19 +28,18 @@ public class Boleta {
     public double getTotal() {
         return precio * (1 - descuento / 100.0);
     }
-    
-    // Getters
 
+    // Getters
     // Obtiene el numero de la boleta
     public int getNumero() {
         return numero;
     }
-    
+
     // Obtiene el precio sin descuento
     public double getPrecio() {
         return precio;
     }
-    
+
     // Obtiene el descuento de la boleta
     public int getDescuento() {
         return descuento;

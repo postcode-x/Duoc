@@ -30,24 +30,24 @@ public class Asiento {
     public String mostrar() {
         return numero + ") " + zona.nombre() + " " + fila + "-" + columna;
     }
-    
+
     // Muestra el asiento en formato reducido para vista de layout
     public String mostrarSimple() {
-        return numero + (numero < 10 ? ".  ": ". ") + fila + "-" + columna + " [" + (getEstado() == AppConfig.Estado.DISPONIBLE ? "D" : getEstado() == AppConfig.Estado.SELECCIONADO ? "S" :"X") + "]" ;
+        return numero + (numero < 10 ? ".  " : ". ") + fila + "-" + columna + " [" + (getEstado() == AppConfig.Estado.DISPONIBLE ? "D" : getEstado() == AppConfig.Estado.SELECCIONADO ? "S" : "X") + "]";
     }
 
     // Muestra el asiento en formato para boleta
     public String mostrarItemAsientoBoleta() {
-        return "Asiento # " + numero +
-               " | Ubicacion: " + zona.nombre() + fila + "-" + columna +
-               " | Precio: $" + Math.round(zona.precio());
+        return "Asiento # " + numero
+                + " | Ubicacion: " + zona.nombre() + fila + "-" + columna
+                + " | Precio: $" + Math.round(zona.precio());
     }
 
     // Cambia estado a disponible
     public void setDisponible() {
         estado = AppConfig.Estado.DISPONIBLE;
     }
-    
+
     // Cambia estado a seleccionado
     public void setSeleccionado() {
         estado = AppConfig.Estado.SELECCIONADO;
@@ -62,7 +62,7 @@ public class Asiento {
     public AppConfig.Estado getEstado() {
         return estado;
     }
-    
+
     // Obtiene numero de asiento
     public int getNumero() {
         return numero;

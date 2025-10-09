@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VentaService {
-    
+
     // Contador para asientos
     private static int contadorAsientos = 0;
-    
+
     // Contados para boletas
     private static int contadorBoletas = 0;
-    
+
     // Lista de todos los asientos del teatro
     private final List<Asiento> asientos = new ArrayList<>();
 
@@ -22,7 +22,7 @@ public class VentaService {
 
     // Lista de asientos que el usuario tiene en el carrito
     private final List<Asiento> carrito = new ArrayList<>();
-    
+
     public VentaService() {
         for (AppConfig.Zona zona : AppConfig.ZONAS) {
             for (int fila = 1; fila <= AppConfig.FILAS_POR_ZONA; fila++) {
@@ -33,20 +33,20 @@ public class VentaService {
             }
         }
     }
-    
+
     // Muestra el layout del teatro con los asientos por zona
     public String mostrar() {
         StringBuilder layoutTeatro = new StringBuilder();
 
         for (AppConfig.Zona zona : AppConfig.ZONAS) {
             layoutTeatro.append(zona.nombre())
-                         .append(" | $").append(Math.round(zona.precio()))
-                         .append("\n");
+                    .append(" | $").append(Math.round(zona.precio()))
+                    .append("\n");
 
             for (Asiento asiento : asientos) {
                 if (asiento.getZona().equals(zona)) {
                     layoutTeatro.append(asiento.mostrarSimple()).append("  ");
-                    
+
                     if (asiento.getColumna() == AppConfig.ASIENTOS_POR_FILA) {
                         layoutTeatro.append("\n");
                     }
@@ -57,9 +57,9 @@ public class VentaService {
 
         return layoutTeatro.toString();
     }
-    
-    public int calculaDescuentoPorEdad(int edad){
-        if (edad <= AppConfig.EDAD_MAX_NINO){
+
+    public int calculaDescuentoPorEdad(int edad) {
+        if (edad <= AppConfig.EDAD_MAX_NINO) {
             return AppConfig.DESCUENTO_NINOS;
         }
         if (AppConfig.EDAD_MAX_NINO < edad && edad <= AppConfig.EDAD_MAX_ESTUDIANTE) {
@@ -70,13 +70,13 @@ public class VentaService {
         }
         return 0;
     }
-    
-    public int calculaDescuentoPorGenero(boolean esMujer){
+
+    public int calculaDescuentoPorGenero(boolean esMujer) {
         return esMujer ? AppConfig.DESCUENTO_MUJER : 0;
     }
-    
+
     // Retorna cantidad de asientos disponibles
-    public int getAsientosDisponibles(){
+    public int getAsientosDisponibles() {
         int contador = 0;
         for (Asiento asiento : asientos) {
             if (asiento.getEstado() == AppConfig.Estado.DISPONIBLE) {
@@ -85,7 +85,7 @@ public class VentaService {
         }
         return contador;
     }
-    
+
     // Marca los asientos del carrito como vendidos y crea boleta
     public int marcarComoVendidos(int descuento) {
         for (Asiento asiento : carrito) {
@@ -96,7 +96,7 @@ public class VentaService {
         carrito.clear();
         return contadorBoletas;
     }
-    
+
     // Marca los asientos del carrito como disponibles si no se compro
     public void marcarComoDisponibles() {
         for (Asiento asiento : carrito) {
@@ -106,7 +106,7 @@ public class VentaService {
         }
         carrito.clear();
     }
-    
+
     // Calcula total de los asientos en el carrito
     public double calcularTotalCarrito() {
         double totalCheckout = 0;
@@ -115,7 +115,7 @@ public class VentaService {
         }
         return totalCheckout;
     }
-    
+
     // Calcula total de los asientos en el carrito con descuento
     public double calcularTotalCarritoConDescuento(int descuentoFinal) {
         double totalCheckout = 0;
@@ -124,10 +124,12 @@ public class VentaService {
         }
         return totalCheckout;
     }
-    
+
     // Muestra los asientos en el carrito
     public String mostrarAsientosCarrito() {
-        if (carrito.isEmpty()) return "";
+        if (carrito.isEmpty()) {
+            return "";
+        }
 
         StringBuilder sb = new StringBuilder();
         for (Asiento asiento : carrito) {
@@ -137,24 +139,24 @@ public class VentaService {
 
         return sb.toString();
     }
-    
+
     // Getters
     public List<Asiento> getAsientos() {
         return asientos;
     }
-    
+
     public List<Boleta> getBoletas() {
         return boletas;
     }
-    
+
     public List<Asiento> getCarrito() {
         return carrito;
     }
-    
+
     public int getNumeroBoletas() {
         return boletas.size();
     }
-    
+
     public int getAsientosVendidos() {
         int contador = 0;
         for (Asiento asiento : asientos) {
@@ -164,7 +166,7 @@ public class VentaService {
         }
         return contador;
     }
-    
+
     // Elimina una boleta existente por número
     public boolean eliminarVenta(int numeroBoleta) {
         for (int i = 0; i < boletas.size(); i++) {
@@ -181,7 +183,7 @@ public class VentaService {
         }
         return false;
     }
-    
+
     // Genera un resumen general del estado del teatro
     public String generarReporteGeneral() {
         int totalAsientos = asientos.size();
