@@ -92,14 +92,23 @@ public class Main {
             int numeroAsiento = seleccionarAsiento(sc, ventaService);
 
             // Marca el asiento como seleccionado y lo agrega al carrito
-            for (Asiento asiento : ventaService.getAsientos()) {
-                if (asiento.getNumero() == numeroAsiento) {
-                    asiento.setSeleccionado();
-                    ventaService.getCarrito().add(asiento);
-                    break;
-                }
-            }
-
+            
+            // Esta opción es más adecuada en caso de que la lista de asientos
+            // se modifique.
+            
+            //for (Asiento asiento : ventaService.getAsientos()) {
+            //    if (asiento.getNumero() == numeroAsiento) {
+            //        asiento.setSeleccionado();
+            //        ventaService.getCarrito().add(asiento);
+            //        break;
+            //    }
+            //}
+            
+            // Esta opción asume que la lista de asientos nunca cambia
+            Asiento asiento = ventaService.getAsientos().get(numeroAsiento -1);
+            asiento.setSeleccionado();
+            ventaService.getCarrito().add(asiento);
+            
             seguirComprando = preguntaSeguirComprando(sc);
 
         } while (seguirComprando);
