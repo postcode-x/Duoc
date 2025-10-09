@@ -33,7 +33,7 @@ public class Main {
             switch (opcion) {
                 case 1 -> mostrarAsientosTeatroUI(ventaService);
                 case 2 -> venderEntradaUI(sc, ventaService);
-                case 3 -> listarEntradasUI(sc, ventaService);
+                case 3 -> mostrarVentasUI(sc, ventaService);
                 //case 4 -> eliminarVenta();
                 //case 5 -> mostrarReporte();
                 case 6 -> System.out.println("\nHasta luego!");
@@ -208,7 +208,7 @@ public class Main {
     }
     
     // UI para listar ventas / imprimir boleta
-    private static void listarEntradasUI(Scanner sc, VentaService ventaService) {
+    private static void mostrarVentasUI(Scanner sc, VentaService ventaService) {
         if (ventaService.getNumeroBoletas() == 0) {
             System.out.println("\nNo existen entradas vendidas.");
             return;
