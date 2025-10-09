@@ -62,9 +62,7 @@ public class Main {
         }
         
         ventaService.getCarrito().clear();
-        
-        boolean seguirComprando = true;
-        
+                
         int edad = preguntarEdadCliente(sc);
         boolean esMujer = preguntarGeneroMujer(sc);
 
@@ -72,6 +70,8 @@ public class Main {
         int descuentoPorGenero = ventaService.calculaDescuentoPorGenero(esMujer);
 
         int descuentoFinal = Math.max(descuentoPorEdad, descuentoPorGenero);
+        
+        boolean seguirComprando;
         
         do {
             // Seleccionar ubicacion
@@ -82,6 +82,7 @@ public class Main {
                     asiento.setDescuento(descuentoFinal);
                     asiento.setPendiente();
                     ventaService.getCarrito().add(asiento);
+                    break;
                 }
             }
                         
