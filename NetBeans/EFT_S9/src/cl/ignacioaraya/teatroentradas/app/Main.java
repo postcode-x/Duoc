@@ -124,7 +124,6 @@ public class Main {
         return opcion == 1;
     }
 
-    
     // Pregunta al usuario si desea seguir comprando
     private static boolean preguntaSeguirComprando(Scanner sc) {
         int opcionSeguir;
@@ -205,7 +204,5 @@ public class Main {
         sc.nextLine();
         return respuesta.equals("s");
     }
-    
-    
     
 }
