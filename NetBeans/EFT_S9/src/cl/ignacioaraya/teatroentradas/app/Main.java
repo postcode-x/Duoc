@@ -5,6 +5,7 @@ import cl.ignacioaraya.teatroentradas.model.Asiento;
 import cl.ignacioaraya.teatroentradas.model.Boleta;
 import cl.ignacioaraya.teatroentradas.service.VentaService;
 import cl.ignacioaraya.teatroentradas.util.InputUtils;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -119,7 +120,7 @@ public class Main {
         do {
             opcion = InputUtils.leerEntero(sc, "\n1 = Pagar / 0 = Cancelar: ");
             if (opcion != 0 && opcion != 1) {
-                System.out.println("Opción no válida.");
+                System.out.println("Opcion no valida.");
             }
         } while (opcion != 0 && opcion != 1);
 
@@ -190,21 +191,15 @@ public class Main {
     
     // UI para preguntar al usuario por su género
     private static boolean preguntarGeneroMujer(Scanner sc) {
-        String respuesta;
-
-        while (true) {
-            System.out.print("\nEs usted de genero femenino (S/N)? : ");
-            respuesta = sc.next().trim().toLowerCase();
-
-            if (respuesta.length() == 1 && (respuesta.equals("s") || respuesta.equals("n"))) {
-                break;
-            } else {
-                System.out.println("Respuesta no valida. Ingrese 's' para si o 'n' para no.");
+        int opcion;
+        do {
+            opcion = InputUtils.leerEntero(sc, "\nEs usted de genero femenino (1 = Si / 0 = No): ");
+            if (opcion != 0 && opcion != 1) {
+                System.out.println("Opcion no valida.");
             }
-        }
+        } while (opcion != 0 && opcion != 1);
 
-        sc.nextLine();
-        return respuesta.equals("s");
+        return opcion == 1;
     }
     
     // UI para listar ventas / imprimir boleta
@@ -220,18 +215,27 @@ public class Main {
         do {
         
             System.out.println("\n--- RESUMEN DE VENTAS ---\n");
-            for (Boleta boleta : ventaService.getBoletas()) {
-                System.out.println("Boleta # " + boleta.getNumero() + " | Total: $" +  Math.round(boleta.getTotal()));
+            //for (Boleta boleta : ventaService.getBoletas()) {
+            //    System.out.println("Boleta # " + boleta.getNumero() + " | Total: $" +  Math.round(boleta.getTotal()));
+            //}
+            
+            List<Boleta> boletas = ventaService.getBoletas();
+            
+            for (int i = 0; i < boletas.size(); i++) {
+                Boleta boleta = boletas.get(i);
+                System.out.println((i + 1) + ") | Boleta # " 
+                        + boleta.getNumero() + " | Total: $" 
+                        +  Math.round(boleta.getTotal()));
             }
             
-            opcion = InputUtils.leerEntero(sc, "\nEscriba numero de boleta para ver detalle (0 para salir): ");
+            opcion = InputUtils.leerEntero(sc, "\nEscriba numero para ver detalle (0 para salir): ");
             
             if (opcion == 0) break;
             
             if (opcion < 1 || opcion > ventaService.getBoletas().size()) {
-                System.out.println("Numero de boleta no valido.");
+                System.out.println("\nOpcion invalida.");
             }else{
-                Boleta boleta = ventaService.getBoletas().get(opcion -1);
+                Boleta boleta = boletas.get(opcion -1);
                 System.out.println("\nBoleta # " + boleta.getNumero() + " | Cantidad de Asientos: " + boleta.getAsientos().size());
                 for(Asiento asiento: boleta.getAsientos()){
                     System.out.println(asiento.getNumero() + (asiento.getNumero() < 10 ? ".  | ": ". | ") + asiento.getFila() + "-" + asiento.getColumna() + " " + asiento.getZona().nombre() + " | Precio: $" + Math.round(asiento.getZona().precio()));
