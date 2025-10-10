@@ -32,20 +32,13 @@ public class Main {
             opcion = InputUtils.leerEntero(sc, "\nSeleccione una opcion: ");
 
             switch (opcion) {
-                case 1 ->
-                    mostrarAsientosTeatroUI(ventaService);
-                case 2 ->
-                    venderEntradaUI(sc, ventaService);
-                case 3 ->
-                    mostrarVentasUI(sc, ventaService);
-                case 4 ->
-                    eliminarVentaUI(sc, ventaService);
-                case 5 ->
-                    mostrarReporteGeneralUI(ventaService);
-                case 6 ->
-                    System.out.println("\nHasta luego!");
-                default ->
-                    System.out.println("Opcion invalida.");
+                case 1 -> mostrarAsientosTeatroUI(ventaService);
+                case 2 -> venderEntradaUI(sc, ventaService);
+                case 3 -> mostrarVentasUI(sc, ventaService);
+                case 4 -> eliminarVentaUI(sc, ventaService);
+                case 5 -> mostrarReporteGeneralUI(ventaService);
+                case 6 -> System.out.println("\nHasta luego!");
+                default -> System.out.println("Opcion invalida.");
             }
 
         } while (opcion != 6);
@@ -91,19 +84,7 @@ public class Main {
             // Selecciona un asiento disponible
             int numeroAsiento = seleccionarAsiento(sc, ventaService);
 
-            // Marca el asiento como seleccionado y lo agrega al carrito
-            
-            // Esta opción es más adecuada en caso de que la lista de asientos
-            // se modifique.
-            
-            //for (Asiento asiento : ventaService.getAsientos()) {
-            //    if (asiento.getNumero() == numeroAsiento) {
-            //        asiento.setSeleccionado();
-            //        ventaService.getCarrito().add(asiento);
-            //        break;
-            //    }
-            //}
-            
+            // Marca el asiento como seleccionado y lo agrega al carrito            
             // Esta opción asume que la lista de asientos nunca cambia
             Asiento asiento = ventaService.getAsientos().get(numeroAsiento -1);
             asiento.setSeleccionado();
